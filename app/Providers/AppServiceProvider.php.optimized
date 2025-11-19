@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Providers;
+
+use App\Models\Assessment;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        Paginator::useBootstrapFour();
+        
+        // Load helpers
+        require_once app_path('helpers.php');
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        // ✅ OPTIMIZED: Cache active assessments for 1 hour
+        // Only show in navigation/footer (reduce query impact)
+        View::composer('layouts.*.header', 'layouts.*.footer', function ($view) {
+            $activeAssessments = Cache::remember(
+                'active_assessments_nav',
+                now()->addHour(),
+                function () {
+                    return Assessment::select('id', 'title', 'is_active')
+                        ->where('is_active', true)
+                        ->orderBy('created_at', 'desc')
+                        ->limit(10)  // Only show 10 in navigation
+                        ->get();
+                }
+            );
+            
+            $view->with('activeAssessments', $activeAssessments);
+        });
+
+        // ✅ OPTIMIZED: Cache admin status in session
+        View::composer('*', function ($view) {
+            $isAdmin = false;
+            
+            if (Auth::check()) {
+                // Cache admin status in user session for 1 hour
+                $isAdmin = Cache::remember(
+                    'user_is_admin_' . Auth::id(),
+                    now()->addHour(),
+                    function () {
+                        return Auth::user()->isAdmin();
+                    }
+                );
+            }
+            
+            $view->with('isAdmin', $isAdmin);
+        });
+
+        // Database index hints (add to migration if needed)
+        // Assessment table indices:
+        // - INDEX(is_active, created_at)
+        // - INDEX(is_active)
+    }
+}
