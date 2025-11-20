@@ -43,20 +43,20 @@ if "%1"=="--migrate" (
     php artisan migrate
 )
 
-REM Start Octane server
+REM Start Octane server dengan RoadRunner (optimized untuk Windows)
 echo.
 echo ================================================
-echo Starting Octane server...
-echo Server will be available at: http://localhost:8000
+echo Starting Octane with RoadRunner...
+echo Server akan tersedia di: http://localhost:8000
 echo ================================================
 echo.
 
-php artisan octane:start --host=127.0.0.1 --port=8000 --workers=4
+php artisan octane:start --server=roadrunner --host=127.0.0.1 --port=8000 --workers=4
 
 if errorlevel 1 (
     echo.
     echo Error: Failed to start Octane server
-    echo Make sure you have installed RoadRunner:
+    echo Make sure RoadRunner is installed:
     echo   php artisan octane:install --server=roadrunner
     pause
     exit /b 1

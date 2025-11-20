@@ -4,7 +4,6 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use App\Http\Middleware\ContentSecurityPolicy;
-use App\Http\Middleware\DecryptRoutes;
 
 class Kernel extends HttpKernel
 {

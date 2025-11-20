@@ -37,9 +37,9 @@ if [ "$1" = "--migrate" ]; then
     php artisan migrate
 fi
 
-# Start Octane server
-echo -e "${YELLOW}Starting Octane server...${NC}"
-echo -e "${GREEN}Server will be available at: http://0.0.0.0:8000${NC}"
+# Start Octane server dengan RoadRunner (optimized)
+echo -e "${YELLOW}Starting Octane with RoadRunner...${NC}"
+echo -e "${GREEN}Server tersedia di: http://0.0.0.0:8000${NC}"
 echo ""
 
 php artisan octane:start \

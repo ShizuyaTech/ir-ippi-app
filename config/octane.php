@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'warm' => false,
+    'warm' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -204,6 +204,9 @@ return [
     'frankenphp' => [
         'options' => [
             'num_workers' => env('OCTANE_WORKERS', 4),
+            'max_concurrency' => 512,
+            'max_request_size' => 33554432, // 32 MB
+            'memory_limit' => '256M',
         ],
     ],
 ];
