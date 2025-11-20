@@ -37,8 +37,18 @@ apt install -y \
   php${PHP_VERSION}-bcmath \
   php${PHP_VERSION}-dev
 
-echo -e "${YELLOW}Step 3: Install Swoole (RECOMMENDED for best performance)${NC}"
-apt install -y autoconf
+echo -e "${YELLOW}Step 3: Install Swoole Dependencies${NC}"
+apt install -y \
+  autoconf \
+  automake \
+  libtool \
+  pkg-config \
+  libcurl4-openssl-dev \
+  libbrotli-dev \
+  libssl-dev \
+  zlib1g-dev
+
+echo -e "${YELLOW}Step 4: Install Swoole (RECOMMENDED for best performance)${NC}"
 pecl install swoole
 echo "extension=swoole.so" >> /etc/php/${PHP_VERSION}/cli/php.ini
 echo "extension=swoole.so" >> /etc/php/${PHP_VERSION}/fpm/php.ini
@@ -51,24 +61,24 @@ else
     exit 1
 fi
 
-echo -e "${YELLOW}Step 4: Install Composer${NC}"
+echo -e "${YELLOW}Step 5: Install Composer${NC}"
 curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+sudo mv composer.phar /usr/local/bin/composer
 chmod +x /usr/local/bin/composer
 
-echo -e "${YELLOW}Step 5: Install Node.js & npm${NC}"
+echo -e "${YELLOW}Step 6: Install Node.js & npm${NC}"
 apt install -y nodejs npm
 
-echo -e "${YELLOW}Step 6: Install Nginx${NC}"
+echo -e "${YELLOW}Step 7: Install Nginx${NC}"
 apt install -y nginx
 
-echo -e "${YELLOW}Step 7: Install MySQL Client${NC}"
+echo -e "${YELLOW}Step 8: Install MySQL Client${NC}"
 apt install -y mysql-client
 
-echo -e "${YELLOW}Step 8: Install Certbot for SSL${NC}"
+echo -e "${YELLOW}Step 9: Install Certbot for SSL${NC}"
 apt install -y certbot python3-certbot-nginx
 
-echo -e "${YELLOW}Step 9: Setup Application Directory${NC}"
+echo -e "${YELLOW}Step 10: Setup Application Directory${NC}"
 mkdir -p /var/www
 cd /var/www
 
@@ -81,12 +91,12 @@ else
     git pull origin main
 fi
 
-echo -e "${YELLOW}Step 10: Install Dependencies${NC}"
+echo -e "${YELLOW}Step 11: Install Dependencies${NC}"
 composer install --optimize-autoloader --no-dev
 npm install
 npm run build
 
-echo -e "${YELLOW}Step 11: Create & Configure .env${NC}"
+echo -e "${YELLOW}Step 12: Create & Configure .env${NC}"
 if [ ! -f "$PROJECT_PATH/.env" ]; then
     cp .env.example .env
     php artisan key:generate
@@ -95,12 +105,12 @@ else
     echo -e "${YELLOW}⚠️ .env already exists - please update manually${NC}"
 fi
 
-echo -e "${YELLOW}Step 12: Setup File Permissions${NC}"
+echo -e "${YELLOW}Step 13: Setup File Permissions${NC}"
 chown -R www-data:www-data $PROJECT_PATH
 chmod -R 775 storage bootstrap/cache
 chmod -R 755 public
 
-echo -e "${YELLOW}Step 13: Create Systemd Service for Octane${NC}"
+echo -e "${YELLOW}Step 14: Create Systemd Service for Octane${NC}"
 cat > /etc/systemd/system/ir-ippi-octane.service << 'EOF'
 [Unit]
 Description=IR-IPPI Octane Application Server
@@ -120,30 +130,6 @@ StandardError=append:/var/log/ir-ippi-octane-error.log
 [Install]
 WantedBy=multi-user.target
 EOF
-
-echo -e "${YELLOW}Step 14: Create Systemd Service for Queue${NC}"
-cat > /etc/systemd/system/ir-ippi-queue.service << 'EOF'
-[Unit]
-Description=IR-IPPI Queue Worker
-After=network.target
-
-[Service]
-Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/var/www/ir-ippi-app
-ExecStart=/usr/bin/php /var/www/ir-ippi-app/artisan queue:listen database --tries=3 --timeout=90
-Restart=on-failure
-RestartSec=10
-StandardOutput=append:/var/log/ir-ippi-queue.log
-StandardError=append:/var/log/ir-ippi-queue-error.log
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-systemctl daemon-reload
-systemctl enable ir-ippi-octane ir-ippi-queue
 
 echo -e "${YELLOW}Step 15: Setup Log Rotation${NC}"
 cat > /etc/logrotate.d/ir-ippi << 'EOF'
