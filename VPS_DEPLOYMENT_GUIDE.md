@@ -149,14 +149,16 @@ SESSION_LIFETIME=120
 QUEUE_CONNECTION=database
 # Atau gunakan Redis: QUEUE_CONNECTION=redis
 
-# MAIL (Konfigurasi SMTP untuk production)
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=your_username
-MAIL_PASSWORD=your_password
+# MAIL (Konfigurasi tanpa SMTP - log ke storage/logs/)
+MAIL_MAILER=log
 MAIL_FROM_ADDRESS=noreply@yourdomain.com
 MAIL_FROM_NAME="${APP_NAME}"
+# Jika nanti perlu SMTP, konfigurasi:
+# MAIL_MAILER=smtp
+# MAIL_HOST=smtp.mailtrap.io
+# MAIL_PORT=2525
+# MAIL_USERNAME=your_username
+# MAIL_PASSWORD=your_password
 
 # OCTANE - SWOOLE CONFIGURATION
 OCTANE_SERVER=swoole

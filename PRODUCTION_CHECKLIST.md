@@ -121,21 +121,20 @@ LOG_LEVEL=debug
 - [ ] Consider ELK Stack for centralized logging
 - [ ] Monitor `/storage/logs/` disk usage
 
-### 7. **Mail System** ⚠️
+### 6. **Mail System** ✅
 
-Status: **CONFIGURE FOR PRODUCTION**
+Status: **CONFIGURED (Log Driver)**
 
 Current:
 ```
-MAIL_MAILER=log ❌ Wrong for production
+MAIL_MAILER=log  ✅ (tanpa SMTP)
 ```
 
 **Action Items**:
-- [ ] Configure SMTP: `MAIL_MAILER=smtp`
-- [ ] Set MAIL_HOST, MAIL_USERNAME, MAIL_PASSWORD
-- [ ] Update MAIL_FROM_ADDRESS
-- [ ] Test email sending before deploy
-- [ ] Consider Mailgun/SendGrid for scale
+- [x] Using LOG driver - emails disimpan di `storage/logs/`
+- [ ] Jika nanti perlu SMTP: Ubah `MAIL_MAILER` ke `smtp`
+- [ ] Konfigurasi MAIL_HOST, MAIL_USERNAME, MAIL_PASSWORD (jika pakai SMTP)
+- [ ] Test email sending sebelum production
 
 ### 8. **File System** ✅
 
@@ -197,8 +196,8 @@ Checked:
 | **.env Config** | ⚠️ Needs Update | See "Production .env" below |
 | **Frontend Assets** | ✅ Ready | Run `npm run build` on VPS |
 | **Security** | ✅ Good | Review CSP headers |
-| **Logging** | ⚠️ Adjust Level | Change from debug to warning |
-| **Mail** | ⚠️ Configure | Setup SMTP |
+| **Logging** | ✅ Configured | Using log level: warning |
+| **Mail** | ✅ Configured | Using log driver (tanpa SMTP) |
 | **Monitoring** | ✅ Included | Use VPS_DEPLOYMENT_GUIDE.md |
 
 ---
@@ -235,15 +234,16 @@ SESSION_LIFETIME=120
 # ===== QUEUE =====
 QUEUE_CONNECTION=database   ← Or: redis
 
-# ===== MAIL (IMPORTANT) =====
-MAIL_MAILER=smtp            ← Change from: log
-MAIL_HOST=smtp.mailtrap.io  ← Your SMTP provider
-MAIL_PORT=2525
-MAIL_USERNAME=your_username
-MAIL_PASSWORD=your_password
-MAIL_ENCRYPTION=tls
+# ===== MAIL =====
+MAIL_MAILER=log            ← Log emails ke storage/logs/ (tanpa SMTP)
 MAIL_FROM_ADDRESS=noreply@yourdomain.com
 MAIL_FROM_NAME="${APP_NAME}"
+# Jika nanti perlu SMTP, ubah ke:
+# MAIL_MAILER=smtp
+# MAIL_HOST=smtp.mailtrap.io
+# MAIL_PORT=2525
+# MAIL_USERNAME=your_username
+# MAIL_PASSWORD=your_password
 
 # ===== OCTANE ===== 
 OCTANE_SERVER=swoole        ← SWITCH FROM roadrunner

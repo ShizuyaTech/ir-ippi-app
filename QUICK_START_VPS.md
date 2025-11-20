@@ -13,7 +13,6 @@
 - [ ] SSH access ke VPS
 - [ ] Domain sudah pointing ke IP VPS
 - [ ] Database credentials (atau buat baru)
-- [ ] SMTP/Email credentials untuk production
 
 ---
 
@@ -55,11 +54,7 @@ DB_DATABASE=ir_ippi_db
 DB_USERNAME=ir_ippi_user
 DB_PASSWORD=STRONG_PASSWORD  ← Generate strong password!
 OCTANE_SERVER=swoole
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io  ← Sesuaikan dengan email provider
-MAIL_USERNAME=your_username
-MAIL_PASSWORD=your_password
-MAIL_FROM_ADDRESS=noreply@yourdomain.com
+MAIL_MAILER=log  ← Menggunakan log (tanpa SMTP)
 LOG_LEVEL=warning
 
 # 2. Run database migration
@@ -344,14 +339,16 @@ SESSION_LIFETIME=120
 # QUEUE
 QUEUE_CONNECTION=database
 
-# MAIL - Edit sesuai email provider!
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=your_username
-MAIL_PASSWORD=your_password
+# MAIL
+MAIL_MAILER=log  # Log emails ke storage/logs/ (tanpa SMTP)
 MAIL_FROM_ADDRESS=noreply@yourdomain.com
 MAIL_FROM_NAME="${APP_NAME}"
+# Jika nanti ingin pakai SMTP, ubah ke:
+# MAIL_MAILER=smtp
+# MAIL_HOST=smtp.mailtrap.io
+# MAIL_PORT=2525
+# MAIL_USERNAME=your_username
+# MAIL_PASSWORD=your_password
 
 # OCTANE
 OCTANE_SERVER=swoole
