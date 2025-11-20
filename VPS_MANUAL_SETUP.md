@@ -1,8 +1,12 @@
 # 🚀 VPS Setup - Manual Commands (Step by Step)
 
 **Status**: ✅ Production Ready  
+**Supported OS**: Ubuntu 22.04 LTS, Ubuntu 24.04 LTS  
 **Difficulty**: ⭐ Easy (copy-paste each command)  
 **Time**: ~1 hour
+
+⚠️ **For Ubuntu 24.04**: See **UBUNTU_24_SETUP.md** for optimized setup  
+✅ **For Ubuntu 22.04**: Use this guide (VPS_MANUAL_SETUP.md)
 
 ---
 
