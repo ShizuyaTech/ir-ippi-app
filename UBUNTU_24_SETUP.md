@@ -1,10 +1,14 @@
-# 🚀 VPS Setup - Ubuntu 24.04 Optimized
+# 🚀 VPS Setup - Ubuntu 24.04 Optimized (With SWOOLE)
 
 **Status**: ✅ Optimized for Ubuntu 24.04 LTS  
+**Server Type**: Octane + Swoole (RECOMMENDED for Linux)  
 **PHP Version**: 8.3  
 **Web Server**: Nginx  
-**Database**: MySQL 8.0  
+**Database**: MySQL 8.4  
 **Application Server**: Octane + Swoole  
+
+⚠️ **This guide uses SWOOLE (not RoadRunner)**  
+💡 **See SWOOLE_vs_ROADRUNNER.md for detailed comparison**  
 
 ---
 
