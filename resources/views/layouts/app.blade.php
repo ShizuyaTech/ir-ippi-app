@@ -65,9 +65,6 @@
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 
-
-    <!-- URL Obfuscation System -->
-    @vite('resources/js/url-obfuscation.js')
 </body>
 
 </html>
