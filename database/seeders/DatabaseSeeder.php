@@ -18,37 +18,38 @@ class DatabaseSeeder extends Seeder
     {
         
         // Create additional users
-        User::factory(10)->create();
+        // User::factory(10)->create();
 
         // Buat admin
-        User::create([
-            'name' => 'Administrator',
+        User::updateOrCreate([
             'email' => 'admin@company.com',
-            'password' => Hash::make('password'),
+        ], [
+            'name' => 'Administrator',
+            'password' => Hash::make('2025ippi1234'),
             'email_verified_at' => now(),
         ]);
 
         // Buat pengurus serikat (kita anggap sebagai user biasa tapi punya akses khusus)
         User::create([
-            'name' => 'Ketua Serikat Karyawan',
-            'email' => 'serikat@company.com',
-            'password' => Hash::make('password'),
+            'name' => 'Ketua SPSI',
+            'email' => 'spsi@company.com',
+            'password' => Hash::make('2025spsi1234'),
             'email_verified_at' => now(),
         ]);
 
         User::create([
-            'name' => 'Sekretaris Serikat',
-            'email' => 'sekretaris@company.com',
-            'password' => Hash::make('password'),
+            'name' => 'Ketua IKA',
+            'email' => 'ika@company.com',
+            'password' => Hash::make('2025ika1234'),
             'email_verified_at' => now(),
         ]);
 
-        User::create([
-            'name' => 'Bendahara Serikat',
-            'email' => 'bendahara@company.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-        ]);
+        // User::create([
+        //     'name' => 'Bendahara Serikat',
+        //     'email' => 'bendahara@company.com',
+        //     'password' => Hash::make('password'),
+        //     'email_verified_at' => now(),
+        // ]);
 
         // Seed berita
         $this->call(NewsSeeder::class);

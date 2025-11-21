@@ -1,3 +1,7 @@
+{{-- Debug info --}}
+{{-- Auth::check() = {{ Auth::check() ? 'yes' : 'no' }} --}}
+{{-- Auth::user()->email = {{ Auth::user()->email ?? 'not logged in' }} --}}
+{{-- isAdmin = {{ $isAdmin ?? 'not set' }} --}}
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">

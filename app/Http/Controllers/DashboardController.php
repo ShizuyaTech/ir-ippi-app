@@ -274,6 +274,10 @@ class DashboardController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
+        // Clear cache agar data terbaru langsung muncul
+        \Illuminate\Support\Facades\Cache::forget('dashboard_data_admin');
+        \Illuminate\Support\Facades\Cache::forget('dashboard_data_user');
+
         return redirect()->route('dashboard')
                          ->with('success', 'Scores berhasil ditambahkan.');
     }
@@ -319,6 +323,10 @@ class DashboardController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
+        // Clear cache agar data terbaru langsung muncul
+        \Illuminate\Support\Facades\Cache::forget('dashboard_data_admin');
+        \Illuminate\Support\Facades\Cache::forget('dashboard_data_user');
+
         return redirect()->route('dashboard')
                          ->with('success', 'Scores berhasil diperbarui.');
     }
@@ -335,6 +343,10 @@ class DashboardController extends Controller
         }
 
         $dashboardScore->delete();
+
+        // Clear cache agar data terbaru langsung muncul
+        \Illuminate\Support\Facades\Cache::forget('dashboard_data_admin');
+        \Illuminate\Support\Facades\Cache::forget('dashboard_data_user');
 
         return redirect()->route('dashboard')
                          ->with('success', 'Scores berhasil dihapus.');
