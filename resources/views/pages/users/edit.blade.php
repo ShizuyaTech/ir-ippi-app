@@ -25,7 +25,7 @@
             </div>
             <div class="section-body">
                 <div class="card">
-                    <form action="{{ route_encrypted('users.update', $user->id) }}" method="POST">
+                    <form action="{{ route('users.update', $user->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="card-header">

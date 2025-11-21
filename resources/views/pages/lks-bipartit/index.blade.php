@@ -14,7 +14,7 @@
             {{-- <div class="section-header">
                 <h1>LKS Bipartit</h1>
                 <div class="section-header-button">
-                    <a href="{{ route_encrypted('lks-bipartit.create') }}" class="btn btn-primary">
+                    <a href="{{ route('lks-bipartit.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Task
                     </a>
                 </div>
@@ -27,7 +27,7 @@
                 <h1>LKS Bipartit</h1>
                 <div class="section-header-button">
                     @if (isset($isAdmin) && $isAdmin)
-                        <a href="{{ route_encrypted('lks-bipartit.create') }}" class="btn btn-primary">
+                        <a href="{{ route('lks-bipartit.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Tambah Task
                         </a>
                     @endif
@@ -91,7 +91,7 @@
                                                                 class="d-flex justify-content-between align-items-center mt-2">
                                                                 <small
                                                                     class="text-muted">{{ $task->created_at->format('d M') }}</small>
-                                                                <a href="{{ route_encrypted('lks-bipartit.show', $task->id) }}"
+                                                                <a href="{{ route('lks-bipartit.show', $task->id) }}"
                                                                     class="btn btn-sm btn-outline-info">
                                                                     <i class="fas fa-eye"></i>
                                                                 </a>
@@ -146,7 +146,7 @@
                                                                 class="d-flex justify-content-between align-items-center mt-2">
                                                                 <small
                                                                     class="text-muted">{{ $task->created_at->format('d M') }}</small>
-                                                                <a href="{{ route_encrypted('lks-bipartit.show', $task->id) }}"
+                                                                <a href="{{ route('lks-bipartit.show', $task->id) }}"
                                                                     class="btn btn-sm btn-outline-info">
                                                                     <i class="fas fa-eye"></i>
                                                                 </a>
@@ -201,7 +201,7 @@
                                                                 class="d-flex justify-content-between align-items-center mt-2">
                                                                 <small
                                                                     class="text-muted">{{ $task->created_at->format('d M') }}</small>
-                                                                <a href="{{ route_encrypted('lks-bipartit.show', $task->id) }}"
+                                                                <a href="{{ route('lks-bipartit.show', $task->id) }}"
                                                                     class="btn btn-sm btn-outline-info">
                                                                     <i class="fas fa-eye"></i>
                                                                 </a>
@@ -234,7 +234,7 @@
                                             <!-- Filter Section -->
                                             <div class="row mb-3">
                                                 <div class="col-md-4">
-                                                    <form method="GET" action="{{ route_encrypted('lks-bipartit.index') }}">
+                                                    <form method="GET" action="{{ route('lks-bipartit.index') }}">
                                                         <select name="status" class="form-control selectric"
                                                             onchange="this.form.submit()">
                                                             <option value="">Semua Status</option>
@@ -248,7 +248,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <form method="GET" action="{{ route_encrypted('lks-bipartit.index') }}">
+                                                    <form method="GET" action="{{ route('lks-bipartit.index') }}">
                                                         <select name="priority" class="form-control selectric"
                                                             onchange="this.form.submit()">
                                                             <option value="">Semua Prioritas</option>
@@ -262,7 +262,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <form method="GET" action="{{ route_encrypted('lks-bipartit.index') }}">
+                                                    <form method="GET" action="{{ route('lks-bipartit.index') }}">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
                                                                 placeholder="Cari task..." name="search"
@@ -355,18 +355,18 @@
                                                                 @if (isset($isAdmin) && $isAdmin)
                                                                     <td>
                                                                         <div class="d-flex">
-                                                                            <a href="{{ route_encrypted('lks-bipartit.show', $task->id) }}"
+                                                                            <a href="{{ route('lks-bipartit.show', $task->id) }}"
                                                                                 class="btn btn-sm btn-info mr-1"
                                                                                 title="Lihat Detail">
                                                                                 <i class="fas fa-eye"></i>
                                                                             </a>
-                                                                            <a href="{{ route_encrypted('lks-bipartit.edit', $task->id) }}"
+                                                                            <a href="{{ route('lks-bipartit.edit', $task->id) }}"
                                                                                 class="btn btn-sm btn-warning mr-1"
                                                                                 title="Edit">
                                                                                 <i class="fas fa-edit"></i>
                                                                             </a>
                                                                             <form
-                                                                                action="{{ route_encrypted('lks-bipartit.destroy', $task->id) }}"
+                                                                                action="{{ route('lks-bipartit.destroy', $task->id) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('DELETE')

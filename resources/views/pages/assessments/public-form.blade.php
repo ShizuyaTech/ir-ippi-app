@@ -112,7 +112,7 @@
         <div class="assessment-card mb-4">
             <div class="assessment-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route_encrypted('assessments.public') }}" class="btn btn-outline-light btn-sm">
+                    <a href="{{ route('assessments.public') }}" class="btn btn-outline-light btn-sm">
                         <i class="bi bi-arrow-left me-2"></i>Kembali
                     </a>
                     <div class="text-center">
@@ -156,7 +156,7 @@
         <!-- Form Kuesioner -->
         <div class="assessment-card">
             <div class="card-body p-4">
-                <form action="{{ route_encrypted('assessment.submit', $assessment) }}" method="POST" id="assessmentForm">
+                <form action="{{ route('assessment.submit', $assessment) }}" method="POST" id="assessmentForm">
                     @csrf
                     <input type="hidden" name="user_code" value="{{ $validatedCode }}">
                     <input type="hidden" name="current_page" value="{{ $questions->currentPage() }}">
@@ -220,7 +220,7 @@
                     <!-- Navigation Buttons -->
                     <div class="d-flex justify-content-between mt-4">
                         @if ($questions->currentPage() > 1)
-                            <a href="{{ route_encrypted('assessment.form', ['assessment' => $assessment->id, 'page' => $questions->currentPage() - 1]) }}"
+                            <a href="{{ route('assessment.form', ['assessment' => $assessment->id, 'page' => $questions->currentPage() - 1]) }}"
                                 class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left me-2"></i>Sebelumnya
                             </a>
@@ -280,7 +280,8 @@
                         'submit' : 'lanjutkan';
                     const questionList = unansweredQuestions.join(', ');
                     alert(
-                        `Silakan jawab semua pertanyaan sebelum ${pageType}. \n\nPertanyaan yang belum dijawab: ${questionList}`);
+                        `Silakan jawab semua pertanyaan sebelum ${pageType}. \n\nPertanyaan yang belum dijawab: ${questionList}`
+                        );
 
                     // Scroll ke pertanyaan pertama yang belum dijawab
                     const firstUnanswered = document.querySelector(

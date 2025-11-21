@@ -9,7 +9,7 @@
                 <h1>Create Assessment</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('assessments.index') }}">Assessments</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('assessments.index') }}">Assessments</a></div>
                     <div class="breadcrumb-item">Create Assessment</div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                                     </div>
                                 @endif
 
-                                <form action="{{ route_encrypted('assessments.store') }}" method="POST">
+                                <form action="{{ route('assessments.store') }}" method="POST">
                                     @csrf
 
                                     <div class="form-group">
@@ -152,7 +152,7 @@
                                         <button type="submit" class="btn btn-primary btn-lg">
                                             <i class="fas fa-save"></i> Create Assessment & Generate User Codes
                                         </button>
-                                        <a href="{{ route_encrypted('assessments.index') }}" class="btn btn-secondary btn-lg">
+                                        <a href="{{ route('assessments.index') }}" class="btn btn-secondary btn-lg">
                                             <i class="fas fa-times"></i> Cancel
                                         </a>
                                     </div>

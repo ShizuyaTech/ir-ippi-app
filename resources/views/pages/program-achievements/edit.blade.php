@@ -8,8 +8,8 @@
             <div class="section-header">
                 <h1>Edit Program/Achievement</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route_encrypted('dashboard') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('pages.program-achievements.index') }}">Program &
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('pages.program-achievements.index') }}">Program &
                             Achievement</a></div>
                     <div class="breadcrumb-item">Edit</div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="{{ route_encrypted('pages.program-achievements.update', $program->id) }}" method="POST"
+                                <form action="{{ route('pages.program-achievements.update', $program->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -170,7 +170,7 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-save"></i> Update
                                         </button>
-                                        <a href="{{ route_encrypted('pages.program-achievements.index') }}"
+                                        <a href="{{ route('pages.program-achievements.index') }}"
                                             class="btn btn-secondary">
                                             <i class="fas fa-times"></i> Cancel
                                         </a>

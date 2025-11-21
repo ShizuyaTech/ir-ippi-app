@@ -15,7 +15,7 @@
                 <h1>Edit Feedback</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('feedback.index') }}">Feedback</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('feedback.index') }}">Feedback</a></div>
                     <div class="breadcrumb-item">Edit Feedback</div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                             <h4>Edit Feedback</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route_encrypted('feedback.update', $feedback->id) }}" method="POST">
+                            <form action="{{ route('feedback.update', $feedback->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
@@ -112,7 +112,7 @@
                                 </div>
 
                                 <div class="card-footer text-right">
-                                    <a href="{{ route_encrypted('feedback.index') }}" class="btn btn-secondary">Batal</a>
+                                    <a href="{{ route('feedback.index') }}" class="btn btn-secondary">Batal</a>
                                     <button type="submit" class="btn btn-primary">Update Feedback</button>
                                 </div>
                             </form>

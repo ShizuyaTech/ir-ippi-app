@@ -13,7 +13,7 @@
             <div class="section-header">
                 <h1>Users</h1>
                 <div class="section-header-button">
-                    <a href="{{ route_encrypted('users.create') }}" class="btn btn-primary">Add New</a>
+                    <a href="{{ route('users.create') }}" class="btn btn-primary">Add New</a>
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Settings</a></div>
@@ -29,15 +29,15 @@
                         </div> --}}
                         <div class="card-body">
                             <!-- <div class="float-left">
-                                                                        <select class="form-control selectric">
-                                                                            <option>Action For Selected</option>
-                                                                            <option>Move to Draft</option>
-                                                                            <option>Move to Pending</option>
-                                                                            <option>Delete Pemanently</option>
-                                                                        </select>
-                                                                    </div> -->
+                                                                            <select class="form-control selectric">
+                                                                                <option>Action For Selected</option>
+                                                                                <option>Move to Draft</option>
+                                                                                <option>Move to Pending</option>
+                                                                                <option>Delete Pemanently</option>
+                                                                            </select>
+                                                                        </div> -->
                             <div class="float-right">
-                                <form method="GET" action="{{ route_encrypted('users.index') }}">
+                                <form method="GET" action="{{ route('users.index') }}">
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="Search" name="name">
                                         <div class="input-group-append">
@@ -72,12 +72,12 @@
                                             {{-- @can('update user', 'delete user') --}}
                                             <td>
                                                 <div class="d-flex justify-content-center">
-                                                    <a href='{{ route_encrypted('users.edit', $user->id) }}'
+                                                    <a href='{{ route('users.edit', $user->id) }}'
                                                         class="btn btn-sm btn-info btn-icon">
                                                         <i class="fas fa-edit"></i>
                                                         Edit
                                                     </a>
-                                                    <form action="{{ route_encrypted('users.destroy', $user->id) }}" method="POST"
+                                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                                         class="ml-2">
                                                         <input type="hidden" name="_method" value="DELETE" />
                                                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />

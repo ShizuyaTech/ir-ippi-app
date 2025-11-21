@@ -15,7 +15,7 @@
                 <h1>Tambah Task LKS Bipartit</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('lks-bipartit.index') }}">LKS Bipartit</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('lks-bipartit.index') }}">LKS Bipartit</a></div>
                     <div class="breadcrumb-item">Tambah Task</div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                                 <h4>Form Tambah Task</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route_encrypted('lks-bipartit.store') }}" method="POST">
+                                <form action="{{ route('lks-bipartit.store') }}" method="POST">
                                     @csrf
 
                                     <div class="form-group row mb-4">
@@ -132,7 +132,7 @@
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-save"></i> Simpan Task
                                             </button>
-                                            <a href="{{ route_encrypted('lks-bipartit.index') }}" class="btn btn-secondary">
+                                            <a href="{{ route('lks-bipartit.index') }}" class="btn btn-secondary">
                                                 <i class="fas fa-arrow-left"></i> Kembali
                                             </a>
                                         </div>

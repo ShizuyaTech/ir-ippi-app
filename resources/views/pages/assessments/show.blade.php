@@ -9,7 +9,7 @@
                 <h1>Detail Assessment</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('assessments.index') }}">Assessments</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('assessments.index') }}">Assessments</a></div>
                     <div class="breadcrumb-item">{{ $assessment->title }}</div>
                 </div>
             </div>
@@ -22,10 +22,10 @@
                             <div class="card-header">
                                 <h4>Informasi Assessment</h4>
                                 <div class="card-header-action">
-                                    <a href="{{ route_encrypted('assessments.edit', $assessment->id) }}" class="btn btn-warning">
+                                    <a href="{{ route('assessments.edit', $assessment->id) }}" class="btn btn-warning">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <form action="{{ route_encrypted('assessments.toggle-status', $assessment->id) }}" method="POST"
+                                    <form action="{{ route('assessments.toggle-status', $assessment->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
                                         <button type="submit"
@@ -67,11 +67,11 @@
                                                 </span>
                                             </div>
                                             <div class="btn-group-vertical w-100">
-                                                <a href="{{ route_encrypted('assessments.download-codes', $assessment->id) }}"
+                                                <a href="{{ route('assessments.download-codes', $assessment->id) }}"
                                                     class="btn btn-primary mb-2">
                                                     <i class="fas fa-download"></i> Download User Codes
                                                 </a>
-                                                <a href="{{ route_encrypted('assessments.responses', $assessment->id) }}"
+                                                <a href="{{ route('assessments.responses', $assessment->id) }}"
                                                     class="btn btn-info">
                                                     <i class="fas fa-chart-bar"></i> Lihat Responses
                                                 </a>
@@ -220,7 +220,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route_encrypted('assessments.generate-codes', $assessment->id) }}" method="POST">
+                <form action="{{ route('assessments.generate-codes', $assessment->id) }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

@@ -8,7 +8,7 @@
             <div class="section-header">
                 <h1>Edit Scores</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route_encrypted('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">Edit Scores</div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                                 <h4>Form Edit Scores</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route_encrypted('dashboard-scores.update', $dashboardScore->id) }}" method="POST">
+                                <form action="{{ route('dashboard-scores.update', $dashboardScore->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
 
@@ -83,10 +83,10 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-save"></i> Update Scores
                                         </button>
-                                        <a href="{{ route_encrypted('dashboard') }}" class="btn btn-secondary">
+                                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">
                                             <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
                                         </a>
-                                        <form action="{{ route_encrypted('dashboard-scores.destroy', $dashboardScore->id) }}"
+                                        <form action="{{ route('dashboard-scores.destroy', $dashboardScore->id) }}"
                                             method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')

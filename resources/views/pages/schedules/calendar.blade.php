@@ -13,18 +13,18 @@
             <div class="section-header">
                 <h1>Kalender Kegiatan</h1>
                 <div class="section-header-button">
-                    <a href="{{ route_encrypted('schedules.index') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('schedules.index') }}" class="btn btn-outline-primary">
                         <i class="fas fa-list"></i> Tampilan List
                     </a>
                     @if ($isAdmin)
-                        <a href="{{ route_encrypted('schedules.create') }}" class="btn btn-primary">
+                        <a href="{{ route('schedules.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Tambah Jadwal
                         </a>
                     @endif
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('schedules.index') }}">Jadwal Kegiatan</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('schedules.index') }}">Jadwal Kegiatan</a></div>
                     <div class="breadcrumb-item">Kalender</div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                                             @if ($upcomingSchedules->count() > 0)
                                                 <div class="list-group">
                                                     @foreach ($upcomingSchedules as $schedule)
-                                                        <a href="{{ route_encrypted('schedules.show', $schedule->id) }}"
+                                                        <a href="{{ route('schedules.show', $schedule->id) }}"
                                                             class="list-group-item list-group-item-action">
                                                             <div
                                                                 class="d-flex w-100 justify-content-between align-items-center">
@@ -201,7 +201,7 @@
                 dayClick: function(date, jsEvent, view) {
                     if ({{ $isAdmin ? 'true' : 'false' }}) {
                         var dateStr = date.format('YYYY-MM-DD');
-                        window.location.href = '{{ route_encrypted('schedules.create') }}?date=' + dateStr;
+                        window.location.href = '{{ route('schedules.create') }}?date=' + dateStr;
                     }
                 }
             });

@@ -115,7 +115,7 @@
         @endif
 
         <!-- Validation Form -->
-        <form action="{{ route_encrypted('assessment.validate', $assessment) }}" method="POST">
+        <form action="{{ route('assessment.validate', $assessment) }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label for="user_code" class="form-label fw-semibold">
@@ -140,7 +140,7 @@
                 <button type="submit" class="btn btn-primary btn-lg">
                     <i class="bi bi-check-circle me-2"></i>Validasi Kode
                 </button>
-                <a href="{{ route_encrypted('assessments.public') }}" class="btn btn-outline-secondary">
+                <a href="{{ route('assessments.public') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar Assessment
                 </a>
             </div>

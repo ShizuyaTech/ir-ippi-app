@@ -9,7 +9,7 @@
                 <h1>Detail Feedback</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('feedbacks.index') }}">Feedbacks</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('feedbacks.index') }}">Feedbacks</a></div>
                     <div class="breadcrumb-item">{{ $feedback->title }}</div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                             <div class="card-header">
                                 <h4>Detail Feedback</h4>
                                 <div class="card-header-action">
-                                    <a href="{{ route_encrypted('feedbacks.index') }}" class="btn btn-secondary">
+                                    <a href="{{ route('feedbacks.index') }}" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left"></i> Kembali
                                     </a>
                                 </div>
@@ -149,7 +149,7 @@
                                             <h5>Berikan Tanggapan</h5>
                                         </div>
                                         <div class="card-body">
-                                            <form action="{{ route_encrypted('feedbacks.respond', $feedback->id) }}" method="POST">
+                                            <form action="{{ route('feedbacks.respond', $feedback->id) }}" method="POST">
                                                 @csrf
                                                 <div class="form-group">
                                                     <label>Tanggapan Manajemen</label>
@@ -182,7 +182,7 @@
                                 @if (!$isAdmin && $feedback->status === 'draft' && $feedback->created_by == Auth::id())
                                     <div class="card mt-4">
                                         <div class="card-body text-center">
-                                            <form action="{{ route_encrypted('feedbacks.submit', $feedback->id) }}" method="POST"
+                                            <form action="{{ route('feedbacks.submit', $feedback->id) }}" method="POST"
                                                 class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success"
@@ -190,7 +190,7 @@
                                                     <i class="fas fa-paper-plane"></i> Kirim ke Manajemen
                                                 </button>
                                             </form>
-                                            <a href="{{ route_encrypted('feedbacks.edit', $feedback->id) }}"
+                                            <a href="{{ route('feedbacks.edit', $feedback->id) }}"
                                                 class="btn btn-warning ml-2">
                                                 <i class="fas fa-edit"></i> Edit Feedback
                                             </a>

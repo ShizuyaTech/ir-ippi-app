@@ -9,9 +9,9 @@
                 <h1>Responses Assessment</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('assessments.index') }}">Assessments</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('assessments.index') }}">Assessments</a></div>
                     <div class="breadcrumb-item"><a
-                            href="{{ route_encrypted('assessments.show', $assessment->id) }}">{{ $assessment->title }}</a></div>
+                            href="{{ route('assessments.show', $assessment->id) }}">{{ $assessment->title }}</a></div>
                     <div class="breadcrumb-item">Responses</div>
                 </div>
             </div>

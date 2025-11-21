@@ -39,7 +39,7 @@
                                     <div class="icon">
                                         <i class="bi bi-clipboard-check"></i>
                                     </div>
-                                    <a href="{{ route_encrypted('assessment.validate.form', $assessment->id) }}"
+                                    <a href="{{ route('assessment.validate.form', $assessment->id) }}"
                                         class="stretched-link">
                                         <h3>{{ $assessment->title }}</h3>
                                     </a>

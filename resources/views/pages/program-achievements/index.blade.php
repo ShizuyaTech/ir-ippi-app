@@ -8,7 +8,7 @@
             <div class="section-header">
                 <h1>Program & Achievement Management</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route_encrypted('dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">Program & Achievement</div>
                 </div>
             </div>
@@ -16,7 +16,7 @@
             <div class="section-body">
                 <div class="row mb-3">
                     <div class="col">
-                        <a href="{{ route_encrypted('pages.program-achievements.create') }}" class="btn btn-primary">
+                        <a href="{{ route('pages.program-achievements.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Add New
                         </a>
                     </div>
@@ -25,7 +25,7 @@
                 <!-- Filters -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form action="{{ route_encrypted('pages.program-achievements.index') }}" method="GET">
+                        <form action="{{ route('pages.program-achievements.index') }}" method="GET">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -66,7 +66,7 @@
                             <div class="row">
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary">Filter</button>
-                                    <a href="{{ route_encrypted('pages.program-achievements.index') }}"
+                                    <a href="{{ route('pages.program-achievements.index') }}"
                                         class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
@@ -116,20 +116,20 @@
                                                                 id="status{{ $program->id }}"
                                                                 {{ $program->is_active ? 'checked' : '' }}
                                                                 data-id="{{ $program->id }}"
-                                                                data-url="{{ route_encrypted('pages.program-achievements.toggle-status', $program->id) }}">
+                                                                data-url="{{ route('pages.program-achievements.toggle-status', $program->id) }}">
                                                             <label class="custom-control-label"
                                                                 for="status{{ $program->id }}"></label>
                                                         </div>
                                                     </td>
                                                     <td>{{ $program->author->name ?? 'Unknown' }}</td>
                                                     <td>
-                                                        <a href="{{ route_encrypted('pages.program-achievements.edit', $program->id) }}"
+                                                        <a href="{{ route('pages.program-achievements.edit', $program->id) }}"
                                                             class="btn btn-sm btn-info" data-toggle="tooltip"
                                                             title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <form
-                                                            action="{{ route_encrypted('pages.program-achievements.destroy', $program->id) }}"
+                                                            action="{{ route('pages.program-achievements.destroy', $program->id) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')

@@ -15,7 +15,7 @@
                 <h1>Create Feecback</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('feedbacks.index') }}">Feedback</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('feedbacks.index') }}">Feedback</a></div>
                     <div class="breadcrumb-item">Create Feedback</div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                             <h4>Form Feedback untuk Manajemen</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route_encrypted('feedbacks.store') }}" method="POST">
+                            <form action="{{ route('feedbacks.store') }}" method="POST">
                                 @csrf
 
                                 <div class="form-group">
@@ -108,7 +108,7 @@
                                 </div>
 
                                 <div class="card-footer text-right">
-                                    <a href="{{ route_encrypted('feedbacks.index') }}" class="btn btn-secondary">Batal</a>
+                                    <a href="{{ route('feedbacks.index') }}" class="btn btn-secondary">Batal</a>
                                     <button type="submit" class="btn btn-primary">Simpan Feedback</button>
                                 </div>
                             </form>

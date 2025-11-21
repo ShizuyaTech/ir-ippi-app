@@ -229,7 +229,7 @@
                                 <div class="icon">
                                     <i class="bi bi-activity"></i>
                                 </div>
-                                <a href="{{ route_encrypted('news.show', $news->id) }}" class="stretched-link">
+                                <a href="{{ route('news.show', $news->id) }}" class="stretched-link">
                                     <h3>{{ $news->title }}</h3>
                                 </a>
                                 <p>{{ $news->short_summary ?? 'Berita terbaru seputar industri otomotif.' }}</p>
@@ -255,7 +255,7 @@
             <!-- View More Button -->
             @if ($latestNews->count() > 0)
                 <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="500">
-                    <a href="{{ route_encrypted('news.index') }}" class="btn btn-primary">
+                    <a href="{{ route('news.index') }}" class="btn btn-primary">
                         Lihat Semua Berita
                     </a>
                 </div>
@@ -1376,7 +1376,7 @@
                                             data-gallery="program-gallery" class="glightbox preview-link">
                                             <i class="bi bi-zoom-in"></i>
                                         </a>
-                                        <a href="{{ route_encrypted('programs.show', $program->id) }}" title="More Details"
+                                        <a href="{{ route('programs.show', $program->id) }}" title="More Details"
                                             class="details-link">
                                             <i class="bi bi-link-45deg"></i>
                                         </a>
@@ -1409,7 +1409,7 @@
             <!-- View All Button -->
             @if ($programs->count() >= 20)
                 <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="300">
-                    <a href="{{ route_encrypted('programs.index') }}?type=program" class="btn btn-primary">
+                    <a href="{{ route('programs.index') }}?type=program" class="btn btn-primary">
                         <i class="bi bi-grid-3x3-gap me-2"></i>Lihat Semua Program
                     </a>
                 </div>
@@ -1470,7 +1470,7 @@
                                             data-gallery="achievement-gallery" class="glightbox preview-link">
                                             <i class="bi bi-zoom-in"></i>
                                         </a>
-                                        <a href="{{ route_encrypted('programs.show', $achievement->id) }}" title="More Details"
+                                        <a href="{{ route('programs.show', $achievement->id) }}" title="More Details"
                                             class="details-link">
                                             <i class="bi bi-link-45deg"></i>
                                         </a>
@@ -1504,7 +1504,7 @@
             <!-- View All Button -->
             @if ($achievements->count() >= 20)
                 <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="300">
-                    <a href="{{ route_encrypted('programs.index') }}?type=achievement" class="btn btn-success">
+                    <a href="{{ route('programs.index') }}?type=achievement" class="btn btn-success">
                         <i class="bi bi-trophy me-2"></i>Lihat Semua Achievement
                     </a>
                 </div>

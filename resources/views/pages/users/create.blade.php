@@ -25,7 +25,7 @@
             </div>
             <div class="section-body">
                 <div class="card">
-                    <form action="{{ route_encrypted('users.store') }}" method="POST">
+                    <form action="{{ route('users.store') }}" method="POST">
                         @csrf
                         <div class="card-header">
                             <h4>Input Text</h4>

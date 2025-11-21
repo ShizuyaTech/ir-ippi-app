@@ -13,11 +13,11 @@
             <div class="section-header">
                 <h1>Assessments</h1>
                 <div class="section-header-button">
-                    <a href="{{ route_encrypted('assessments.create') }}" class="btn btn-primary">Add New</a>
+                    <a href="{{ route('assessments.create') }}" class="btn btn-primary">Add New</a>
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('assessments.index') }}">Assessments</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('assessments.index') }}">Assessments</a></div>
                     <div class="breadcrumb-item">All Assessments</div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                             @endif
 
                             <div class="float-right">
-                                <form method="GET" action="{{ route_encrypted('assessments.index') }}">
+                                <form method="GET" action="{{ route('assessments.index') }}">
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="Search" name="title"
                                             value="{{ request('title') }}">
@@ -87,19 +87,19 @@
                                                 <td>{{ $assessment->participant_count }}</td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        <a href="{{ route_encrypted('assessments.show', $assessment->id) }}"
+                                                        <a href="{{ route('assessments.show', $assessment->id) }}"
                                                             class="btn btn-info btn-sm" title="Detail">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
-                                                        <a href="{{ route_encrypted('assessments.edit', $assessment->id) }}"
+                                                        <a href="{{ route('assessments.edit', $assessment->id) }}"
                                                             class="btn btn-warning btn-sm" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="{{ route_encrypted('assessments.responses', $assessment->id) }}"
+                                                        <a href="{{ route('assessments.responses', $assessment->id) }}"
                                                             class="btn btn-success btn-sm" title="Responses">
                                                             <i class="fas fa-chart-bar"></i>
                                                         </a>
-                                                        <form action="{{ route_encrypted('assessments.destroy', $assessment->id) }}"
+                                                        <form action="{{ route('assessments.destroy', $assessment->id) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')

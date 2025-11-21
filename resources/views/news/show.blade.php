@@ -140,7 +140,7 @@
                 <a href="{{ url('/') }}" class="back-button">
                     <i class="bi bi-house-door"></i> Kembali ke Home
                 </a>
-                <a href="{{ route_encrypted('news.index') }}" class="back-button">
+                <a href="{{ route('news.index') }}" class="back-button">
                     <i class="bi bi-arrow-left"></i> Kembali ke Daftar Berita
                 </a>
             </div>
@@ -194,7 +194,7 @@
                                         class="related-image">
                                 @endif
                                 <div class="related-content">
-                                    <a href="{{ route_encrypted('news.show', $related->id) }}" class="related-title">
+                                    <a href="{{ route('news.show', $related->id) }}" class="related-title">
                                         {{ $related->title }}
                                     </a>
                                     <div class="small text-muted">

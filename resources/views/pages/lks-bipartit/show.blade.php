@@ -9,7 +9,7 @@
                 <h1>Detail Task LKS Bipartit</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('lks-bipartit.index') }}">LKS Bipartit</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('lks-bipartit.index') }}">LKS Bipartit</a></div>
                     <div class="breadcrumb-item">Detail Task</div>
                 </div>
             </div>
@@ -22,12 +22,12 @@
                                 <h4>{{ $lksBipartit->title }}</h4>
                                 <div class="card-header-action">
                                     @if (isset($isAdmin) && $isAdmin)
-                                        <a href="{{ route_encrypted('lks-bipartit.edit', $lksBipartit->id) }}"
+                                        <a href="{{ route('lks-bipartit.edit', $lksBipartit->id) }}"
                                             class="btn btn-warning">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                     @endif
-                                    <a href="{{ route_encrypted('lks-bipartit.index') }}" class="btn btn-secondary">
+                                    <a href="{{ route('lks-bipartit.index') }}" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left"></i> Kembali
                                     </a>
                                 </div>

@@ -9,7 +9,7 @@
                 <h1>Edit Assessment</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('assessments.index') }}">Assessments</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('assessments.index') }}">Assessments</a></div>
                     <div class="breadcrumb-item">Edit Assessment</div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                                 <h4>Edit Assessment Details</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route_encrypted('assessments.update', $assessment->id) }}" method="POST">
+                                <form action="{{ route('assessments.update', $assessment->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
 
@@ -90,7 +90,7 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-save"></i> Update Assessment
                                         </button>
-                                        <a href="{{ route_encrypted('assessments.index') }}" class="btn btn-secondary">
+                                        <a href="{{ route('assessments.index') }}" class="btn btn-secondary">
                                             <i class="fas fa-times"></i> Cancel
                                         </a>
                                     </div>
@@ -114,7 +114,7 @@
                                     <h6 class="text-primary mb-3">
                                         <i class="fas fa-plus-circle"></i> Add New Question
                                     </h6>
-                                    <form action="{{ route_encrypted('assessments.questions.store', $assessment->id) }}"
+                                    <form action="{{ route('assessments.questions.store', $assessment->id) }}"
                                         method="POST">
                                         @csrf
                                         <div class="row align-items-end">
@@ -289,7 +289,7 @@
                         }).then(() => {
                             // Redirect ke halaman edit yang sama, bukan index
                             window.location.href =
-                                '{{ route_encrypted('assessments.edit', $assessment->id) }}';
+                                '{{ route('assessments.edit', $assessment->id) }}';
                         });
                         return;
                     }

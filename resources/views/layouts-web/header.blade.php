@@ -11,8 +11,7 @@
             <ul>
                 <li><a href="{{ url('/#hero') }}" class="active">Home</a></li>
                 <li><a href="{{ url('/#about') }}">About</a></li>
-                <li><a href="{{ url('/#' . random_hash('news')) }}"
-                        onclick="UrlObfuscation.navigateTo('news'); return false;">News</a></li>
+                <li><a href="{{ url('/#news') }}">News</a></li>
                 {{-- <li><a href="#portfolio">Grand Design</a></li> --}}
                 {{-- <li><a href="#team">Team</a></li> --}}
                 <!-- Program Dropdown -->

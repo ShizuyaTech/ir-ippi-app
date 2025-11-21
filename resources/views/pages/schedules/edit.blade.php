@@ -16,7 +16,7 @@
                 <h1>Edit Jadwal Kegiatan</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('schedules.index') }}">Jadwal Kegiatan</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('schedules.index') }}">Jadwal Kegiatan</a></div>
                     <div class="breadcrumb-item">Edit Jadwal</div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                             <h4>Form Edit Jadwal</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route_encrypted('schedules.update', $schedule->id) }}" method="POST">
+                            <form action="{{ route('schedules.update', $schedule->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
@@ -200,7 +200,7 @@
                                 </div>
 
                                 <div class="card-footer text-right">
-                                    <a href="{{ route_encrypted('schedules.index') }}" class="btn btn-secondary">Batal</a>
+                                    <a href="{{ route('schedules.index') }}" class="btn btn-secondary">Batal</a>
                                     <button type="submit" class="btn btn-primary">Update Jadwal</button>
                                 </div>
                             </form>

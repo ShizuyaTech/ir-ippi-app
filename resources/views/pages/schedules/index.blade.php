@@ -14,12 +14,12 @@
                 <h1>Schedule Activity</h1>
                 @if ($isAdmin)
                     <div class="section-header-button">
-                        <a href="{{ route_encrypted('schedules.create') }}" class="btn btn-primary">Tambah Jadwal</a>
+                        <a href="{{ route('schedules.create') }}" class="btn btn-primary">Tambah Jadwal</a>
                     </div>
                 @endif
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('schedules.index') }}">Jadwal Kegiatan</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('schedules.index') }}">Jadwal Kegiatan</a></div>
                     <div class="breadcrumb-item">All Schedule</div>
                 </div>
             </div>
@@ -40,12 +40,12 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <a href="{{ route_encrypted('schedules.calendar') }}" class="btn btn-outline-primary">
+                                    <a href="{{ route('schedules.calendar') }}" class="btn btn-outline-primary">
                                         <i class="fas fa-calendar-alt"></i> Tampilan Kalender
                                     </a>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <form method="GET" action="{{ route_encrypted('schedules.index') }}">
+                                    <form method="GET" action="{{ route('schedules.index') }}">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Cari judul kegiatan..."
                                                 name="search" value="{{ request('search') }}">
@@ -62,7 +62,7 @@
                             <!-- Filter Section -->
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <form method="GET" action="{{ route_encrypted('schedules.index') }}">
+                                    <form method="GET" action="{{ route('schedules.index') }}">
                                         <select name="type" class="form-control selectric" onchange="this.form.submit()">
                                             <option value="">Semua Tipe</option>
                                             @foreach (App\Models\Schedule::TYPES as $key => $value)
@@ -75,7 +75,7 @@
                                     </form>
                                 </div>
                                 <div class="col-md-3">
-                                    <form method="GET" action="{{ route_encrypted('schedules.index') }}">
+                                    <form method="GET" action="{{ route('schedules.index') }}">
                                         <select name="status" class="form-control selectric" onchange="this.form.submit()">
                                             <option value="">Semua Status</option>
                                             @foreach (App\Models\Schedule::STATUSES as $key => $value)
@@ -88,7 +88,7 @@
                                     </form>
                                 </div>
                                 <div class="col-md-3">
-                                    <form method="GET" action="{{ route_encrypted('schedules.index') }}">
+                                    <form method="GET" action="{{ route('schedules.index') }}">
                                         <select name="priority" class="form-control selectric"
                                             onchange="this.form.submit()">
                                             <option value="">Semua Prioritas</option>
@@ -102,7 +102,7 @@
                                     </form>
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="{{ route_encrypted('schedules.index') }}" class="btn btn-secondary btn-block">Reset
+                                    <a href="{{ route('schedules.index') }}" class="btn btn-secondary btn-block">Reset
                                         Filter</a>
                                 </div>
                             </div>
@@ -194,7 +194,7 @@
                                                 <td>
                                                     <div class="d-flex justify-content-start">
                                                         <!-- Tombol View - selalu tampil -->
-                                                        <a href="{{ route_encrypted('schedules.show', $schedule->id) }}"
+                                                        <a href="{{ route('schedules.show', $schedule->id) }}"
                                                             class="btn btn-sm btn-info mr-1" title="Lihat Detail"
                                                             data-toggle="tooltip">
                                                             <i class="fas fa-eye"></i>
@@ -202,13 +202,13 @@
 
                                                         <!-- Tombol Edit & Delete - hanya untuk admin -->
                                                         @if ($isAdmin)
-                                                            <a href="{{ route_encrypted('schedules.edit', $schedule->id) }}"
+                                                            <a href="{{ route('schedules.edit', $schedule->id) }}"
                                                                 class="btn btn-sm btn-warning mr-1" title="Edit Jadwal"
                                                                 data-toggle="tooltip">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
 
-                                                            <form action="{{ route_encrypted('schedules.destroy', $schedule->id) }}"
+                                                            <form action="{{ route('schedules.destroy', $schedule->id) }}"
                                                                 method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -237,7 +237,7 @@
                                     <p class="text-muted">
                                         Belum ada jadwal kegiatan.
                                         @if ($isAdmin)
-                                            <a href="{{ route_encrypted('schedules.create') }}">Buat jadwal pertama</a>.
+                                            <a href="{{ route('schedules.create') }}">Buat jadwal pertama</a>.
                                         @endif
                                     </p>
                                 </div>

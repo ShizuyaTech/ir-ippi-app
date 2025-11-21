@@ -14,12 +14,12 @@
                 <h1>Feedback untuk Manajemen</h1>
                 @if (!$isAdmin)
                     <div class="section-header-button">
-                        <a href="{{ route_encrypted('feedbacks.create') }}" class="btn btn-primary">Buat Feedback Baru</a>
+                        <a href="{{ route('feedbacks.create') }}" class="btn btn-primary">Buat Feedback Baru</a>
                     </div>
                 @endif
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('feedbacks.index') }}">Feedback</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('feedbacks.index') }}">Feedback</a></div>
                     <div class="breadcrumb-item">All Feedback</div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                             @endif
 
                             <div class="float-right">
-                                <form method="GET" action="{{ route_encrypted('feedbacks.index') }}">
+                                <form method="GET" action="{{ route('feedbacks.index') }}">
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="Cari judul feedback..."
                                             name="search" value="{{ request('search') }}">
@@ -139,7 +139,7 @@
                                                 <td>
                                                     <div class="d-flex justify-content-start">
                                                         <!-- Tombol View - selalu tampil -->
-                                                        <a href="{{ route_encrypted('feedbacks.show', $feedback->id) }}"
+                                                        <a href="{{ route('feedbacks.show', $feedback->id) }}"
                                                             class="btn btn-sm btn-info mr-1" title="Lihat Detail"
                                                             data-toggle="tooltip">
                                                             <i class="fas fa-eye"></i>
@@ -147,13 +147,13 @@
 
                                                         <!-- Tombol Edit & Delete - hanya untuk pengurus serikat dan status draft -->
                                                         @if (!$isAdmin && $feedback->status === 'draft' && $feedback->created_by == Auth::id())
-                                                            <a href="{{ route_encrypted('feedbacks.edit', $feedback->id) }}"
+                                                            <a href="{{ route('feedbacks.edit', $feedback->id) }}"
                                                                 class="btn btn-sm btn-warning mr-1" title="Edit Feedback"
                                                                 data-toggle="tooltip">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
 
-                                                            <form action="{{ route_encrypted('feedbacks.destroy', $feedback->id) }}"
+                                                            <form action="{{ route('feedbacks.destroy', $feedback->id) }}"
                                                                 method="POST" class="d-inline mr-1">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -165,7 +165,7 @@
                                                             </form>
 
                                                             <!-- Tombol Submit untuk draft (pengurus serikat) -->
-                                                            <form action="{{ route_encrypted('feedbacks.submit', $feedback->id) }}"
+                                                            <form action="{{ route('feedbacks.submit', $feedback->id) }}"
                                                                 method="POST" class="d-inline">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-sm btn-success"
@@ -195,7 +195,7 @@
                                             Belum ada feedback yang dikirim ke manajemen.
                                         @else
                                             Anda belum membuat feedback.
-                                            <a href="{{ route_encrypted('feedbacks.create') }}">Buat feedback pertama Anda</a>.
+                                            <a href="{{ route('feedbacks.create') }}">Buat feedback pertama Anda</a>.
                                         @endif
                                     </p>
                                 </div>

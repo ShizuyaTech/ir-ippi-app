@@ -220,7 +220,7 @@
                             <div class="card-header">
                                 <h4>History Scores</h4>
                                 <div class="card-header-action">
-                                    <a href="{{ route_encrypted('dashboard-scores.create') }}" class="btn btn-primary">
+                                    <a href="{{ route('dashboard-scores.create') }}" class="btn btn-primary">
                                         <i class="fas fa-plus"></i> Tambah Scores Baru
                                     </a>
                                 </div>
@@ -254,12 +254,12 @@
                                                         <td>{{ $score->created_at->format('d M Y H:i') }}</td>
                                                         <td>
                                                             <div class="d-flex">
-                                                                <a href="{{ route_encrypted('dashboard-scores.edit', $score->id) }}"
+                                                                <a href="{{ route('dashboard-scores.edit', $score->id) }}"
                                                                     class="btn btn-sm btn-warning mr-1">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
                                                                 <form
-                                                                    action="{{ route_encrypted('dashboard-scores.destroy', $score->id) }}"
+                                                                    action="{{ route('dashboard-scores.destroy', $score->id) }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -279,7 +279,7 @@
                                     <div class="text-center py-4">
                                         <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
                                         <p class="text-muted">Belum ada data scores</p>
-                                        <a href="{{ route_encrypted('dashboard-scores.create') }}" class="btn btn-primary">
+                                        <a href="{{ route('dashboard-scores.create') }}" class="btn btn-primary">
                                             <i class="fas fa-plus"></i> Tambah Scores Pertama
                                         </a>
                                     </div>
@@ -372,7 +372,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script> --}}
-    <script src="{{ asset('js/scripts.js') }}"></script>
 
     <!-- Chart Data -->
     <script>
@@ -401,7 +400,7 @@
 
     <!-- Dashboard Charts Script - SIMPLIFIED -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             console.log('Dashboard charts initializing...');
 
             // Pastikan Chart.js sudah dimuat

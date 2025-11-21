@@ -15,9 +15,9 @@
                 <h1>Edit Task LKS Bipartit</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route_encrypted('lks-bipartit.index') }}">LKS Bipartit</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('lks-bipartit.index') }}">LKS Bipartit</a></div>
                     <div class="breadcrumb-item"><a
-                            href="{{ route_encrypted('lks-bipartit.show', $lksBipartit->id) }}">{{ Str::limit($lksBipartit->title, 20) }}</a>
+                            href="{{ route('lks-bipartit.show', $lksBipartit->id) }}">{{ Str::limit($lksBipartit->title, 20) }}</a>
                     </div>
                     <div class="breadcrumb-item">Edit Task</div>
                 </div>
@@ -31,7 +31,7 @@
                                 <h4>Form Edit Task</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route_encrypted('lks-bipartit.update', $lksBipartit->id) }}" method="POST">
+                                <form action="{{ route('lks-bipartit.update', $lksBipartit->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
 
@@ -169,10 +169,10 @@
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-save"></i> Update Task
                                             </button>
-                                            <a href="{{ route_encrypted('lks-bipartit.index') }}" class="btn btn-secondary">
+                                            <a href="{{ route('lks-bipartit.index') }}" class="btn btn-secondary">
                                                 <i class="fas fa-arrow-left"></i> Kembali
                                             </a>
-                                            <a href="{{ route_encrypted('lks-bipartit.show', $lksBipartit->id) }}"
+                                            <a href="{{ route('lks-bipartit.show', $lksBipartit->id) }}"
                                                 class="btn btn-info">
                                                 <i class="fas fa-eye"></i> Lihat Detail
                                             </a>

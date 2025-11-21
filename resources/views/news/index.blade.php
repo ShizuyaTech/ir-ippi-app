@@ -153,7 +153,7 @@
                         @endif
 
                         <div class="news-content">
-                            <a href="{{ route_encrypted('news.show', $item->id) }}" class="news-title">
+                            <a href="{{ route('news.show', $item->id) }}" class="news-title">
                                 {{ $item->title }}
                             </a>
                             <div class="news-meta">
@@ -168,7 +168,7 @@
                             <div class="news-summary">
                                 {{ Str::limit($item->summary, 150) }}
                             </div>
-                            <a href="{{ route_encrypted('news.show', $item->id) }}" class="read-more">
+                            <a href="{{ route('news.show', $item->id) }}" class="read-more">
                                 Baca Selengkapnya
                             </a>
                         </div>

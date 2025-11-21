@@ -70,7 +70,7 @@ if (!function_exists('obfuscated_slug')) {
     }
 }
 
-if (!function_exists('route_encrypted')) {
+if (!function_exists('route')) {
     /**
      * Generate encrypted route URL
      * 
@@ -79,7 +79,7 @@ if (!function_exists('route_encrypted')) {
      * @param bool $absolute Generate absolute URL
      * @return string Encrypted route URL
      */
-    function route_encrypted($name, $parameters = [], $absolute = true)
+    function route($name, $parameters = [], $absolute = true)
     {
         return \App\Services\RouteEncryption::route($name, $parameters, $absolute);
     }

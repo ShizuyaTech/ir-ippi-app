@@ -7,7 +7,7 @@
         <div class="section-header">
             <h1>{{ $program->title }}</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route_encrypted('dashboard') }}">Dashboard</a></div>
+                <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
                 <div class="breadcrumb-item">{{ $program->type_name }}</div>
                 <div class="breadcrumb-item">{{ $program->title }}</div>
             </div>
@@ -43,7 +43,7 @@
                                         </div>
                                         @auth
                                             <div>
-                                                <a href="{{ route_encrypted('pages.program-achievements.edit', $program->id) }}"
+                                                <a href="{{ route('pages.program-achievements.edit', $program->id) }}"
                                                     class="btn btn-warning">
                                                     <i class="fas fa-edit"></i> Edit
                                                 </a>
@@ -74,7 +74,7 @@
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ $related->title }}</h5>
                                                     <p class="card-text">{{ $related->short_description }}</p>
-                                                    <a href="{{ route_encrypted('programs.show', $related->id) }}"
+                                                    <a href="{{ route('programs.show', $related->id) }}"
                                                         class="btn btn-primary btn-sm">Read More</a>
                                                 </div>
                                             </div>

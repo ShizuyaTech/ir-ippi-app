@@ -2,7 +2,8 @@
 <nav class="navbar navbar-expand-lg main-navbar">
     <form class="form-inline mr-auto">
         <ul class="navbar-nav mr-3">
-            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg" onclick="event.preventDefault();">☰</a>
+            </li>
         </ul>
     </form>
     <ul class="navbar-nav navbar-right">
@@ -16,7 +17,7 @@
                     onclick="event.preventDefault();getElementById('logout-form').submit()">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
-                <form id="logout-form" action="{{ route_encrypted('logout') }}" method="POST" style="display: none">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none">
                     @csrf
                 </form>
             </div>
