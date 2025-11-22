@@ -9,8 +9,8 @@
                 <div class="footer-contact pt-3">
                     <p>Jl. Kaliabang No. 1 Medan Satria - Pondok ungu</p>
                     <p>Bekasi - Jawa Barat</p>
-                    <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-                    <p><strong>Email:</strong> <span>info@example.com</span></p>
+                    <p class="mt-3"><strong>Contact Person:</strong> <span>+62 882-9812-4005</span></p>
+                    {{-- <p><strong>Email:</strong> <span>info@example.com</span></p> --}}
                 </div>
                 {{-- <div class="social-links d-flex mt-4">
                     <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -34,11 +34,11 @@
             <div class="col-lg-2 col-md-3 footer-links">
                 <h4>Our Services</h4>
                 <ul>
-                    <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
-                    <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
-                    <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
-                    <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
-                    <li><i class="bi bi-chevron-right"></i> <a href="#">Graphic Design</a></li>
+                    <li><i class="bi bi-chevron-right"></i> <a href="#">Stamping Robotic</a></li>
+                    <li><i class="bi bi-chevron-right"></i> <a href="#">Assembly Robotic</a></li>
+                    <li><i class="bi bi-chevron-right"></i> <a href="#">Die Making</a></li>
+                    {{-- <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
+                    <li><i class="bi bi-chevron-right"></i> <a href="#">Graphic Design</a></li> --}}
                 </ul>
             </div>
 
