@@ -64,7 +64,7 @@ class HomeController extends Controller
             ]);
 
             // Return view with default values if error occurs
-            return view('pages.homepage', [
+            return view('pages.home', [
                 'totalAssessments' => 0,
                 'totalFeedbacks' => 0,
                 'totalSchedules' => 0,
