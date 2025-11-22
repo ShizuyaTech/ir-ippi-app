@@ -202,7 +202,7 @@
     </section><!-- /News Section --> --}}
 
     <!-- News Section -->
-    <section id="news" class="news section">
+    {{-- <section id="news" class="news section">
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
@@ -263,7 +263,7 @@
 
         </div>
 
-    </section><!-- /News Section -->
+    </section><!-- /News Section --> --}}
 
     <!-- Clients Section -->
     {{-- <section id="clients" class="clients section light-background">
@@ -1511,6 +1511,7 @@
             @endif
 
         </div>
+    </section><!-- /Achievement Section -->
 
         <!-- Scroll Top -->
         <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
