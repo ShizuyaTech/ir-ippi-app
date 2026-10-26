@@ -3,7 +3,6 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use App\Http\Middleware\ContentSecurityPolicy;
 
 class Kernel extends HttpKernel
 {
@@ -57,6 +56,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'admin' => \App\Http\Middleware\EnsureAdministrator::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         // 'signed' => \Illuminate\Foundation\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'safety.role' => \App\Http\Middleware\EnsureSafetyReportRole::class,
         // 'decrypt.routes' => DecryptRoutes::class,
     ];
 }

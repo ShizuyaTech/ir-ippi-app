@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Assessment;
 use App\Models\Feedback;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 
 class FeedbackSeeder extends Seeder
 {
@@ -19,9 +16,9 @@ class FeedbackSeeder extends Seeder
     {
         // Ambil user yang akan sebagai pengurus serikat (bukan admin)
         $unionUsers = User::where('email', 'like', '%serikat%')
-                         ->orWhere('email', 'like', '%sekretaris%')
-                         ->orWhere('email', 'like', '%bendahara%')
-                         ->get();
+            ->orWhere('email', 'like', '%sekretaris%')
+            ->orWhere('email', 'like', '%bendahara%')
+            ->get();
 
         // Jika tidak ada user serikat, buat default
         if ($unionUsers->isEmpty()) {
@@ -29,7 +26,10 @@ class FeedbackSeeder extends Seeder
         }
 
         // Ambil admin
-        $admin = User::where('email', 'admin@company.com')->first();
+        $admin = User::query()
+            ->where('role', 'admin')
+            ->orWhereIn('email', config('auth.admin_emails', []))
+            ->first();
 
         // Sample data feedback yang realistis
         $sampleFeedbacks = [
@@ -40,7 +40,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'kebijakan',
                 'priority' => 'high',
                 'status' => 'submitted',
-                'submitted_at' => Carbon::now()->subDays(5)
+                'submitted_at' => Carbon::now()->subDays(5),
             ],
             [
                 'title' => 'Keluhan Kondisi AC di Area Produksi',
@@ -48,7 +48,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'fasilitas',
                 'priority' => 'urgent',
                 'status' => 'submitted',
-                'submitted_at' => Carbon::now()->subDays(3)
+                'submitted_at' => Carbon::now()->subDays(3),
             ],
             [
                 'title' => 'Usulan Improvement Sistem Komunikasi Internal',
@@ -56,7 +56,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'komunikasi',
                 'priority' => 'medium',
                 'status' => 'submitted',
-                'submitted_at' => Carbon::now()->subDays(7)
+                'submitted_at' => Carbon::now()->subDays(7),
             ],
             [
                 'title' => 'Masalah Jam Kerja Lembur',
@@ -64,7 +64,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'kondisi_kerja',
                 'priority' => 'high',
                 'status' => 'submitted',
-                'submitted_at' => Carbon::now()->subDays(10)
+                'submitted_at' => Carbon::now()->subDays(10),
             ],
 
             // Feedback dengan status draft
@@ -74,7 +74,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'fasilitas',
                 'priority' => 'medium',
                 'status' => 'draft',
-                'submitted_at' => null
+                'submitted_at' => null,
             ],
             [
                 'title' => 'Feedback Program Pelatihan Karyawan',
@@ -82,7 +82,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'lainnya',
                 'priority' => 'low',
                 'status' => 'draft',
-                'submitted_at' => null
+                'submitted_at' => null,
             ],
 
             // Feedback yang sudah ditanggapi
@@ -95,7 +95,7 @@ class FeedbackSeeder extends Seeder
                 'submitted_at' => Carbon::now()->subDays(15),
                 'management_response' => 'Terima kasih atas masukannya. Kami sedang menyusun panduan promosi yang lebih transparan dan akan melakukan sosialisasi ke seluruh karyawan dalam waktu dekat. Timeline penyelesaian sekitar 1 bulan ke depan.',
                 'responded_at' => Carbon::now()->subDays(5),
-                'responded_by' => $admin ? $admin->id : null
+                'responded_by' => $admin ? $admin->id : null,
             ],
             [
                 'title' => 'Keluhan Kebersihan Toilet dan Area Umum',
@@ -106,7 +106,7 @@ class FeedbackSeeder extends Seeder
                 'submitted_at' => Carbon::now()->subDays(20),
                 'management_response' => 'Kami akan meningkatkan frekuensi cleaning service dan melakukan monitoring ketat terhadap kebersihan area toilet. Selain itu, akan ditempelkan poster himbauan untuk menjaga kebersihan bersama.',
                 'responded_at' => Carbon::now()->subDays(8),
-                'responded_by' => $admin ? $admin->id : null
+                'responded_by' => $admin ? $admin->id : null,
             ],
 
             // Feedback dalam review
@@ -116,7 +116,7 @@ class FeedbackSeeder extends Seeder
                 'category' => 'fasilitas',
                 'priority' => 'medium',
                 'status' => 'under_review',
-                'submitted_at' => Carbon::now()->subDays(12)
+                'submitted_at' => Carbon::now()->subDays(12),
             ],
             [
                 'title' => 'Permintaan Penyesuaian Jam Masuk',
@@ -124,8 +124,8 @@ class FeedbackSeeder extends Seeder
                 'category' => 'kebijakan',
                 'priority' => 'high',
                 'status' => 'under_review',
-                'submitted_at' => Carbon::now()->subDays(8)
-            ]
+                'submitted_at' => Carbon::now()->subDays(8),
+            ],
         ];
 
         foreach ($sampleFeedbacks as $feedbackData) {
@@ -141,16 +141,16 @@ class FeedbackSeeder extends Seeder
                 'responded_by' => $feedbackData['responded_by'] ?? null,
                 'created_by' => $unionUsers->random()->id,
                 'created_at' => $feedbackData['submitted_at'] ?? Carbon::now()->subDays(rand(1, 25)),
-                'updated_at' => $feedbackData['responded_at'] ?? ($feedbackData['submitted_at'] ?? Carbon::now()->subDays(rand(0, 10)))
+                'updated_at' => $feedbackData['responded_at'] ?? ($feedbackData['submitted_at'] ?? Carbon::now()->subDays(rand(0, 10))),
             ]);
         }
 
         $this->command->info('Sample feedback data created successfully!');
-        $this->command->info('Total Feedbacks: ' . Feedback::count() . ' feedbacks');
+        $this->command->info('Total Feedbacks: '.Feedback::count().' feedbacks');
         $this->command->info('Status Distribution:');
-        $this->command->info('- Draft: ' . Feedback::where('status', 'draft')->count());
-        $this->command->info('- Submitted: ' . Feedback::where('status', 'submitted')->count());
-        $this->command->info('- Under Review: ' . Feedback::where('status', 'under_review')->count());
-        $this->command->info('- Responded: ' . Feedback::where('status', 'responded')->count());
+        $this->command->info('- Draft: '.Feedback::where('status', 'draft')->count());
+        $this->command->info('- Submitted: '.Feedback::where('status', 'submitted')->count());
+        $this->command->info('- Under Review: '.Feedback::where('status', 'under_review')->count());
+        $this->command->info('- Responded: '.Feedback::where('status', 'responded')->count());
     }
 }

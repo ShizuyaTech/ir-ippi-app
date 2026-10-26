@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assessment;
+use App\Models\AssessmentUserCode;
 use App\Models\Question;
 use App\Models\ResponseAssessment;
-use App\Models\AssessmentUserCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,11 +20,11 @@ class AssessmentController extends Controller
         // Get all assessments with pagination and search
         $assessments = Assessment::withCount(['questions', 'responses', 'userCodes'])
             ->when($request->input('title'), function ($query, $title) {
-                $searchTerm = '%' . $title . '%';
-                
-                $query->where(function($q) use ($searchTerm) {
+                $searchTerm = '%'.$title.'%';
+
+                $query->where(function ($q) use ($searchTerm) {
                     $q->where('title', 'like', $searchTerm)
-                      ->orWhere('description', 'like', $searchTerm);
+                        ->orWhere('description', 'like', $searchTerm);
                 });
 
             })
@@ -32,7 +32,6 @@ class AssessmentController extends Controller
             ->paginate(10);
 
         $isAdmin = $this->isAdmin(Auth::user()); // Using the helper method defined below
-
 
         return view('pages.assessments.index', compact('assessments', 'isAdmin'));
     }
@@ -51,46 +50,46 @@ class AssessmentController extends Controller
     public function store(Request $request)
     {
         // Validate the request
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'participant_count' => 'required|integer|min:1|max:1000',
-        'start_date' => 'nullable|date',
-        'end_date' => 'nullable|date|after:start_date',
-        'is_active' => 'sometimes|boolean'
-    ]);
-
-    try {
-        DB::beginTransaction();
-
-        // Create assessment
-        $assessment = Assessment::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'participant_count' => $validated['participant_count'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'is_active' => $request->boolean('is_active', true)
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'participant_count' => 'required|integer|min:1|max:1000',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'is_active' => 'sometimes|boolean',
         ]);
 
-        // Generate user codes otomatis
-        $codes = AssessmentUserCode::generateForAssessment(
-            $assessment->id,
-            $validated['participant_count']
-        );
+        try {
+            DB::beginTransaction();
 
-        DB::commit();
+            // Create assessment
+            $assessment = Assessment::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'participant_count' => $validated['participant_count'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'is_active' => $request->boolean('is_active', true),
+            ]);
 
-        return redirect()->route('assessments.edit', $assessment->id)
-            ->with('success', "Assessment created successfully! {$codes->count()} user codes generated.");
+            // Generate user codes otomatis
+            $codes = AssessmentUserCode::generateForAssessment(
+                $assessment->id,
+                $validated['participant_count']
+            );
 
-    } catch (\Exception $e) {
-        DB::rollBack();
-        
-        return redirect()->back()
-            ->with('error', 'Failed to create assessment: ' . $e->getMessage())
-            ->withInput();
-    }
+            DB::commit();
+
+            return redirect()->route('assessments.edit', $assessment->id)
+                ->with('success', "Assessment created successfully! {$codes->count()} user codes generated.");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()
+                ->with('error', 'Failed to create assessment: '.$e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -102,10 +101,10 @@ class AssessmentController extends Controller
         // This is much faster for getting statistics
         $assessment = Assessment::withCount([
             'questions',
-            'responses', 
-            'userCodes'
+            'responses',
+            'userCodes',
         ])
-        ->findOrFail($id);
+            ->findOrFail($id);
 
         // ✅ OPTIMIZED: Get specific counts using single query
         $userCodes = $assessment->userCodes()
@@ -113,7 +112,7 @@ class AssessmentController extends Controller
             ->with('user:id,name,email')
             ->latest()
             ->paginate(20);
-        
+
         // Get response statistics - now using aggregation instead of extra queries
         $responseStats = [
             'total_responses' => $assessment->responses_count,
@@ -130,6 +129,7 @@ class AssessmentController extends Controller
     public function edit(string $id)
     {
         $assessment = Assessment::with('questions')->findOrFail($id);
+
         return view('pages.assessments.edit', compact('assessment'));
     }
 
@@ -144,17 +144,17 @@ class AssessmentController extends Controller
             'description' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
-            'is_active' => 'sometimes|boolean'
+            'is_active' => 'sometimes|boolean',
         ]);
 
         $assessment = Assessment::findOrFail($id);
-        
+
         $assessment->update([
             'title' => $request->title,
             'description' => $request->description,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'is_active' => $request->boolean('is_active')
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('assessments.index')->with('success', 'Assessment updated successfully');
@@ -179,24 +179,24 @@ class AssessmentController extends Controller
     public function generateAdditionalCodes(Request $request, Assessment $assessment)
     {
         $request->validate([
-            'additional_count' => 'required|integer|min:1|max:100'
+            'additional_count' => 'required|integer|min:1|max:100',
         ]);
 
         try {
             $additionalCount = $request->input('additional_count');
-            
+
             // Generate codes tambahan
             $newCodes = AssessmentUserCode::generateForAssessment($assessment->id, $additionalCount);
 
             // Update participant count
             $assessment->update([
-                'participant_count' => $assessment->participant_count + $additionalCount
+                'participant_count' => $assessment->participant_count + $additionalCount,
             ]);
 
             return back()->with('success', "Berhasil menambahkan {$additionalCount} user codes!");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to generate additional codes: ' . $e->getMessage());
+            return back()->with('error', 'Failed to generate additional codes: '.$e->getMessage());
         }
     }
 
@@ -210,25 +210,25 @@ class AssessmentController extends Controller
             ->with('user:id,name,email')
             ->get();
 
-        $fileName = "user-codes-assessment-{$assessment->id}-" . now()->format('Y-m-d') . ".csv";
+        $fileName = "user-codes-assessment-{$assessment->id}-".now()->format('Y-m-d').'.csv';
 
         $headers = [
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=$fileName",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
-        $callback = function() use ($codes) {
+        $callback = function () use ($codes) {
             $file = fopen('php://output', 'w');
-            
+
             // Add BOM for UTF-8
             fwrite($file, "\xEF\xBB\xBF");
-            
+
             // Header CSV
             fputcsv($file, ['Kode User', 'Status', 'Digunakan Oleh', 'Email', 'Tanggal Digunakan', 'Kadaluarsa']);
-            
+
             // Data
             foreach ($codes as $code) {
                 fputcsv($file, [
@@ -237,10 +237,10 @@ class AssessmentController extends Controller
                     $code->user ? $code->user->name : '-',
                     $code->user ? $code->user->email : '-',
                     $code->used_at ? $code->used_at->format('d/m/Y H:i') : '-',
-                    $code->expires_at ? $code->expires_at->format('d/m/Y') : '-'
+                    $code->expires_at ? $code->expires_at->format('d/m/Y') : '-',
                 ]);
             }
-            
+
             fclose($file);
         };
 
@@ -253,11 +253,11 @@ class AssessmentController extends Controller
     public function toggleStatus(Assessment $assessment)
     {
         $assessment->update([
-            'is_active' => !$assessment->is_active
+            'is_active' => ! $assessment->is_active,
         ]);
 
         $status = $assessment->is_active ? 'activated' : 'deactivated';
-        
+
         return back()->with('success', "Assessment successfully {$status}");
     }
 
@@ -269,7 +269,7 @@ class AssessmentController extends Controller
     public function storeQuestion(Request $request, Assessment $assessment)
     {
         $request->validate([
-            'question_text' => 'required|string|max:1000'
+            'question_text' => 'required|string|max:1000',
         ]);
 
         try {
@@ -278,7 +278,7 @@ class AssessmentController extends Controller
                 'question_text' => $request->question_text,
                 'description' => null,
                 'order' => $assessment->questions()->count() + 1,
-                'is_active' => true
+                'is_active' => true,
             ]);
 
             return redirect()->route('assessments.edit', $assessment->id)
@@ -286,7 +286,7 @@ class AssessmentController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Failed to add question: ' . $e->getMessage());
+                ->with('error', 'Failed to add question: '.$e->getMessage());
         }
     }
 
@@ -297,20 +297,20 @@ class AssessmentController extends Controller
     {
         $request->validate([
             'question_text' => 'required|string|max:1000',
-            'is_active' => 'sometimes|boolean'
+            'is_active' => 'sometimes|boolean',
         ]);
 
         try {
             $question->update([
                 'question_text' => $request->question_text,
-                'is_active' => $request->boolean('is_active')
+                'is_active' => $request->boolean('is_active'),
             ]);
 
             // Jika request AJAX, return JSON
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Question updated successfully'
+                    'message' => 'Question updated successfully',
                 ]);
             }
 
@@ -322,12 +322,12 @@ class AssessmentController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to update question: ' . $e->getMessage()
+                    'message' => 'Failed to update question: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', 'Failed to update question: ' . $e->getMessage());
+                ->with('error', 'Failed to update question: '.$e->getMessage());
         }
     }
 
@@ -345,7 +345,7 @@ class AssessmentController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Failed to delete question: ' . $e->getMessage());
+                ->with('error', 'Failed to delete question: '.$e->getMessage());
         }
     }
 
@@ -386,25 +386,10 @@ class AssessmentController extends Controller
      */
     protected function isAdmin($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
-        // If the user model exposes an is_admin attribute
-        if (isset($user->is_admin)) {
-            return (bool) $user->is_admin;
-        }
-
-        // If the user model uses a role attribute
-        if (isset($user->role) && $user->role === 'admin') {
-            return true;
-        }
-
-        // If using a roles package like Spatie
-        if (method_exists($user, 'hasRole')) {
-            return (bool) $user->hasRole('admin');
-        }
-
-        return false;
+        return $user->isAdmin();
     }
 }

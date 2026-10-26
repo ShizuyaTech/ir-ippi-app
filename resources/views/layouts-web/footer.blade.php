@@ -44,12 +44,12 @@
 
             <div class="col-lg-4 col-md-12 footer-newsletter">
                 {{-- <div class="social-links d-flex mt-4"> --}}
-                <p>Follow Us:
+                {{-- <p>Follow Us:
                     <a href=""><i class="bi bi-twitter-x"></i></a>
                     <a href=""><i class="bi bi-facebook"></i></a>
                     <a href=""><i class="bi bi-instagram"></i></a>
                     <a href=""><i class="bi bi-linkedin"></i></a>
-                </p>
+                </p> --}}
                 {{-- </div> --}}
                 {{-- <h4>Our Newsletter</h4>
                 <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
@@ -66,9 +66,12 @@
     </div>
 
     <div class="container copyright text-center mt-4">
-        <p>© <span>Copyright</span> <strong class="px-1 sitename">2025 Mahardika</strong> <span>All Rights
+        {{-- <p>© <span>Copyright</span> <strong class="px-1 sitename">2025 Mahardika</strong> <span>All Rights
                 Reserved</span>
-        </p>
+        </p> --}}
+        
+        <p>Copyright &copy; {{ date('Y') }} IR Partner. All rights reserved.</p>
+
         <div class="credits">
             <!-- All the links in the footer should remain intact. -->
             <!-- You can delete the links only if you've purchased the pro version. -->

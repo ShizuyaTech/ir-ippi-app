@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assessment;
 use App\Models\DashboardScore;
+use App\Models\Feedback;
 use App\Models\LksBipartit;
+use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Models\Assessment;
-use App\Models\AssessmentUser;
-use App\Models\Feedback;
-use App\Models\Schedule;
 
 class DashboardController extends Controller
 {
@@ -23,19 +22,19 @@ class DashboardController extends Controller
         // ✅ OPTIMIZED: Cache dashboard data for 5 minutes
         // Check if user is admin first
         $isAdmin = $this->checkAdminStatus();
-        
+
         // Cache key includes user ID to differentiate between admin/non-admin
-        $cacheKey = 'dashboard_data_' . ($isAdmin ? 'admin' : 'user');
+        $cacheKey = 'dashboard_data_'.($isAdmin ? 'admin' : 'user');
         $cacheDuration = 5; // minutes
-        
+
         $dashboardData = \Illuminate\Support\Facades\Cache::remember(
             $cacheKey,
             now()->addMinutes($cacheDuration),
             function () {
                 // Get latest scores
                 $scores = DashboardScore::latest()->first();
-                
-                if (!$scores) {
+
+                if (! $scores) {
                     $scores = (object) [
                         'ir_partnership' => 0,
                         'conductive_working_climate' => 0,
@@ -55,19 +54,16 @@ class DashboardController extends Controller
                 ];
             }
         );
-        
+
         // ✅ OPTIMIZED: Only fetch admin scores if needed (lazy load)
         $allScores = $isAdmin ? DashboardScore::with('updater')->latest()->limit(50)->get() : collect();
 
-        // ✅ OPTIMIZED: Cache admin count for 1 hour (rarely changes)
-        $totalAdmin = \Illuminate\Support\Facades\Cache::remember(
-            'total_admin_count',
-            now()->addHour(),
-            function () {
-                $adminEmails = array_map('trim', explode(',', env('ADMIN_EMAILS', 'admin@company.com')));
-                return User::whereIn('email', $adminEmails)->count();
-            }
-        );
+        $totalAdmin = User::query()
+            ->where(function ($query): void {
+                $query->where('role', 'admin')
+                    ->orWhereIn('email', config('auth.admin_emails', []));
+            })
+            ->count();
 
         return view('pages.dashboard', array_merge($dashboardData, compact(
             'allScores',
@@ -86,8 +82,8 @@ class DashboardController extends Controller
             SUM(CASE WHEN status = "on_progress" THEN 1 ELSE 0 END) as in_progress,
             SUM(CASE WHEN status = "done" THEN 1 ELSE 0 END) as completed
         ')
-        ->first()
-        ->toArray();
+            ->first()
+            ->toArray();
     }
 
     /**
@@ -123,16 +119,16 @@ class DashboardController extends Controller
             ->get();
 
         $formattedData = [];
-        
+
         // Format data untuk memastikan semua bulan ada
         for ($month = 1; $month <= 12; $month++) {
             $monthData = $data->firstWhere('month', $month);
-            
+
             $formattedData[$month] = [
-                'closed' => $monthData ? (int)$monthData->closed : 0,
-                'under_review' => $monthData ? (int)$monthData->under_review : 0,
-                'responded' => $monthData ? (int)$monthData->responded : 0,
-                'submitted' => $monthData ? (int)$monthData->submitted : 0,
+                'closed' => $monthData ? (int) $monthData->closed : 0,
+                'under_review' => $monthData ? (int) $monthData->under_review : 0,
+                'responded' => $monthData ? (int) $monthData->responded : 0,
+                'submitted' => $monthData ? (int) $monthData->submitted : 0,
             ];
         }
 
@@ -171,15 +167,15 @@ class DashboardController extends Controller
             ->get();
 
         $formattedData = [];
-        
+
         // Format data untuk memastikan semua bulan ada
         for ($month = 1; $month <= 12; $month++) {
             $monthData = $data->firstWhere('month', $month);
-            
+
             $formattedData[$month] = [
-                'review' => $monthData ? (int)$monthData->review : 0,
-                'on_progress' => $monthData ? (int)$monthData->on_progress : 0,
-                'done' => $monthData ? (int)$monthData->done : 0,
+                'review' => $monthData ? (int) $monthData->review : 0,
+                'on_progress' => $monthData ? (int) $monthData->on_progress : 0,
+                'done' => $monthData ? (int) $monthData->done : 0,
             ];
         }
 
@@ -192,9 +188,9 @@ class DashboardController extends Controller
     private function formatMonthlyData($data)
     {
         $formattedData = [];
-        
+
         for ($month = 1; $month <= 12; $month++) {
-            $formattedData[$month] = isset($data[$month]) ? (int)$data[$month] : 0;
+            $formattedData[$month] = isset($data[$month]) ? (int) $data[$month] : 0;
         }
 
         return $formattedData;
@@ -206,19 +202,12 @@ class DashboardController extends Controller
     private function checkAdminStatus()
     {
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             return false;
         }
 
-        // Method 1: Check using isAdmin method if exists
-        if (method_exists($user, 'isAdmin')) {
-            // return $user->isAdmin();
-        }
-
-        // Method 2: Check by email in ADMIN_EMAILS
-        $adminEmails = array_map('trim', explode(',', env('ADMIN_EMAILS', 'admin@company.com')));
-        return in_array(strtolower($user->email), array_map('strtolower', $adminEmails));
+        return $user->isAdmin();
     }
 
     /**
@@ -233,16 +222,16 @@ class DashboardController extends Controller
         Log::info('LKS Data:', $lksData);
         Log::info('=== END CHART DATA DEBUG ===');
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $user = Auth::user();
-        if (!$user || !$this->checkAdminStatus()) {
+        if (! $user || ! $this->checkAdminStatus()) {
             return redirect()->route('dashboard')
-                             ->with('error', 'Anda tidak memiliki akses untuk membuat scores.');
+                ->with('error', 'Anda tidak memiliki akses untuk membuat scores.');
         }
 
         return view('pages.dashboard-scores.create');
@@ -254,9 +243,9 @@ class DashboardController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if (!$user || !$this->checkAdminStatus()) {
+        if (! $user || ! $this->checkAdminStatus()) {
             return redirect()->route('dashboard')
-                             ->with('error', 'Anda tidak memiliki akses untuk membuat scores.');
+                ->with('error', 'Anda tidak memiliki akses untuk membuat scores.');
         }
 
         $request->validate([
@@ -279,7 +268,7 @@ class DashboardController extends Controller
         \Illuminate\Support\Facades\Cache::forget('dashboard_data_user');
 
         return redirect()->route('dashboard')
-                         ->with('success', 'Scores berhasil ditambahkan.');
+            ->with('success', 'Scores berhasil ditambahkan.');
     }
 
     /**
@@ -288,12 +277,13 @@ class DashboardController extends Controller
     public function edit(string $id)
     {
         $user = Auth::user();
-        if (!$user || !$this->checkAdminStatus()) {
+        if (! $user || ! $this->checkAdminStatus()) {
             return redirect()->route('dashboard')
-                             ->with('error', 'Anda tidak memiliki akses untuk mengedit scores.');
+                ->with('error', 'Anda tidak memiliki akses untuk mengedit scores.');
         }
 
         $dashboardScore = DashboardScore::findOrFail($id);
+
         return view('pages.dashboard-scores.edit', compact('dashboardScore'));
     }
 
@@ -303,9 +293,9 @@ class DashboardController extends Controller
     public function update(Request $request, DashboardScore $dashboardScore)
     {
         $user = Auth::user();
-        if (!$user || !$this->checkAdminStatus()) {
+        if (! $user || ! $this->checkAdminStatus()) {
             return redirect()->route('dashboard')
-                             ->with('error', 'Anda tidak memiliki akses untuk mengupdate scores.');
+                ->with('error', 'Anda tidak memiliki akses untuk mengupdate scores.');
         }
 
         $request->validate([
@@ -328,7 +318,7 @@ class DashboardController extends Controller
         \Illuminate\Support\Facades\Cache::forget('dashboard_data_user');
 
         return redirect()->route('dashboard')
-                         ->with('success', 'Scores berhasil diperbarui.');
+            ->with('success', 'Scores berhasil diperbarui.');
     }
 
     /**
@@ -337,9 +327,9 @@ class DashboardController extends Controller
     public function destroy(DashboardScore $dashboardScore)
     {
         $user = Auth::user();
-        if (!$user || !$this->checkAdminStatus()) {
+        if (! $user || ! $this->checkAdminStatus()) {
             return redirect()->route('dashboard')
-                             ->with('error', 'Anda tidak memiliki akses untuk menghapus scores.');
+                ->with('error', 'Anda tidak memiliki akses untuk menghapus scores.');
         }
 
         $dashboardScore->delete();
@@ -349,15 +339,15 @@ class DashboardController extends Controller
         \Illuminate\Support\Facades\Cache::forget('dashboard_data_user');
 
         return redirect()->route('dashboard')
-                         ->with('success', 'Scores berhasil dihapus.');
+            ->with('success', 'Scores berhasil dihapus.');
     }
-    
+
     public function updateScores(Request $request)
     {
         $user = Auth::user();
-        if (!$user || !$this->checkAdminStatus()) {
+        if (! $user || ! $this->checkAdminStatus()) {
             return redirect()->route('dashboard')
-                             ->with('error', 'Anda tidak memiliki akses untuk mengupdate scores.');
+                ->with('error', 'Anda tidak memiliki akses untuk mengupdate scores.');
         }
 
         $request->validate([
@@ -376,6 +366,6 @@ class DashboardController extends Controller
         ]);
 
         return redirect()->route('dashboard')
-                         ->with('success', 'Scores berhasil diperbarui.');
+            ->with('success', 'Scores berhasil diperbarui.');
     }
 }

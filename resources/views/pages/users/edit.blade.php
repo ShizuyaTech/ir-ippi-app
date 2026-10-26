@@ -78,24 +78,18 @@
                                     </div>
                                 @enderror
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="roles">Roles</label>
-                                    <div id="roles" style="display: flex; gap: 50px;">
-                                        @foreach ($roles as $role)
-                                            <div class="form-check" style="display: flex; align-items: center;">
-                                                <input 
-                                                    type="checkbox" 
-                                                    name="roles[]" 
-                                                    id="role_{{ $role }}" 
-                                                    value="{{ $role }}" {{ in_array($role,$userRole) ? 'checked' : '' }}
-                                                    class="form-check-input"
-                                                >
-                                                <label for="role_{{ $role }}" class="form-check-label">{{ $role }}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                            <div class="form-group">
+                                <label for="role">Hak akses</label>
+                                <select class="form-control @error('role') is-invalid @enderror" id="role" name="role" required>
+                                    @foreach (\App\Models\User::SAFETY_REPORT_ROLES as $value => $label)
+                                        <option value="{{ $value }}" @selected(old('role', $user->role ?? 'user') === $value)>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                @error('role')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div> --}}
+                        </div>
                             <div class="card-footer text-right">
                                 <button class="btn btn-primary">Update</button>
                             </div>

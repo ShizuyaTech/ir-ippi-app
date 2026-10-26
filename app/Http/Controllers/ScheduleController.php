@@ -19,12 +19,12 @@ class ScheduleController extends Controller
         // Filter berdasarkan status jika ada
         $status = request('status');
         $type = request('type');
-        
+
         $schedules = Schedule::with('author')
-            ->when($status, function($query, $status) {
+            ->when($status, function ($query, $status) {
                 return $query->where('status', $status);
             })
-            ->when($type, function($query, $type) {
+            ->when($type, function ($query, $type) {
                 return $query->where('type', $type);
             })
             ->latest()
@@ -39,8 +39,8 @@ class ScheduleController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
-        if (!$this->isAdmin($user)) {
+
+        if (! $this->isAdmin($user)) {
             abort(403, 'Hanya admin yang dapat membuat jadwal kegiatan.');
         }
 
@@ -53,8 +53,8 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        
-        if (!$this->isAdmin($user)) {
+
+        if (! $this->isAdmin($user)) {
             abort(403, 'Hanya admin yang dapat membuat jadwal kegiatan.');
         }
 
@@ -69,7 +69,7 @@ class ScheduleController extends Controller
             'type' => 'required|in:meeting,training,event,deadline,other',
             'priority' => 'required|in:low,medium,high',
             'status' => 'required|in:scheduled,in_progress,completed,cancelled',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
         Schedule::create([
@@ -84,11 +84,11 @@ class ScheduleController extends Controller
             'priority' => $request->priority,
             'status' => $request->status,
             'notes' => $request->notes,
-            'created_by' => $user->id
+            'created_by' => $user->id,
         ]);
 
         return redirect()->route('schedules.index')
-                        ->with('success', 'Jadwal kegiatan berhasil dibuat.');
+            ->with('success', 'Jadwal kegiatan berhasil dibuat.');
     }
 
     /**
@@ -108,8 +108,8 @@ class ScheduleController extends Controller
     public function edit(string $id)
     {
         $user = Auth::user();
-        
-        if (!$this->isAdmin($user)) {
+
+        if (! $this->isAdmin($user)) {
             abort(403, 'Hanya admin yang dapat mengedit jadwal kegiatan.');
         }
 
@@ -124,8 +124,8 @@ class ScheduleController extends Controller
     public function update(Request $request, string $id)
     {
         $user = Auth::user();
-        
-        if (!$this->isAdmin($user)) {
+
+        if (! $this->isAdmin($user)) {
             abort(403, 'Hanya admin yang dapat mengedit jadwal kegiatan.');
         }
 
@@ -142,7 +142,7 @@ class ScheduleController extends Controller
             'type' => 'required|in:meeting,training,event,deadline,other',
             'priority' => 'required|in:low,medium,high',
             'status' => 'required|in:scheduled,in_progress,completed,cancelled',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
         $schedule->update([
@@ -156,11 +156,11 @@ class ScheduleController extends Controller
             'type' => $request->type,
             'priority' => $request->priority,
             'status' => $request->status,
-            'notes' => $request->notes
+            'notes' => $request->notes,
         ]);
 
         return redirect()->route('schedules.index')
-                        ->with('success', 'Jadwal kegiatan berhasil diperbarui.');
+            ->with('success', 'Jadwal kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -169,8 +169,8 @@ class ScheduleController extends Controller
     public function destroy(string $id)
     {
         $user = Auth::user();
-        
-        if (!$this->isAdmin($user)) {
+
+        if (! $this->isAdmin($user)) {
             abort(403, 'Hanya admin yang dapat menghapus jadwal kegiatan.');
         }
 
@@ -178,37 +178,37 @@ class ScheduleController extends Controller
         $schedule->delete();
 
         return redirect()->route('schedules.index')
-                        ->with('success', 'Jadwal kegiatan berhasil dihapus.');
+            ->with('success', 'Jadwal kegiatan berhasil dihapus.');
     }
 
     /**
- * Calendar view
- */
-public function calendar()
-{
-    $schedules = Schedule::where('start_date', '>=', now()->subMonths(1))
-                        ->where('end_date', '<=', now()->addMonths(3))
-                        ->get();
+     * Calendar view
+     */
+    public function calendar()
+    {
+        $schedules = Schedule::where('start_date', '>=', now()->subMonths(1))
+            ->where('end_date', '<=', now()->addMonths(3))
+            ->get();
 
-    $calendarEvents = $schedules->map(function($schedule) {
-        $color = $this->getEventColor($schedule->type);
-        
-        return [
-            'id' => $schedule->id,
-            'title' => $schedule->title,
-            'start' => $schedule->start_date->format('Y-m-d') . ($schedule->start_time ? 'T' . $schedule->start_time->format('H:i:s') : ''),
-            'end' => $schedule->end_date->format('Y-m-d') . ($schedule->end_time ? 'T' . $schedule->end_time->format('H:i:s') : ''),
-            'color' => $color,
-            'textColor' => '#ffffff',
-            'className' => 'fc-event-' . $schedule->type,
-            'url' => route('schedules.show', $schedule->id)
-        ];
-    });
+        $calendarEvents = $schedules->map(function ($schedule) {
+            $color = $this->getEventColor($schedule->type);
 
-    $isAdmin = $this->isAdmin(Auth::user());
+            return [
+                'id' => $schedule->id,
+                'title' => $schedule->title,
+                'start' => $schedule->start_date->format('Y-m-d').($schedule->start_time ? 'T'.$schedule->start_time->format('H:i:s') : ''),
+                'end' => $schedule->end_date->format('Y-m-d').($schedule->end_time ? 'T'.$schedule->end_time->format('H:i:s') : ''),
+                'color' => $color,
+                'textColor' => '#ffffff',
+                'className' => 'fc-event-'.$schedule->type,
+                'url' => route('schedules.show', $schedule->id),
+            ];
+        });
 
-    return view('pages.schedules.calendar', compact('calendarEvents', 'isAdmin'));
-}
+        $isAdmin = $this->isAdmin(Auth::user());
+
+        return view('pages.schedules.calendar', compact('calendarEvents', 'isAdmin'));
+    }
 
     /**
      * Get event color based on type
@@ -220,7 +220,7 @@ public function calendar()
             'training' => '#2ecc71',     // Green
             'event' => '#9b59b6',        // Purple
             'deadline' => '#e74c3c',     // Red
-            'other' => '#f39c12'         // Orange
+            'other' => '#f39c12',         // Orange
         ];
 
         return $colors[$type] ?? '#95a5a6'; // Default gray
@@ -231,8 +231,6 @@ public function calendar()
      */
     private function isAdmin($user)
     {
-        return $user->email === 'admin@company.com' 
-            || $user->email === 'administrator@company.com'
-            || (isset($user->role) && $user->role === 'admin');
+        return $user?->isAdmin() ?? false;
     }
 }

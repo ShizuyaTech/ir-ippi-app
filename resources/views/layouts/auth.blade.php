@@ -17,6 +17,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+    @stack('page-style')
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
@@ -32,7 +33,7 @@
     <!-- END GA -->
 </head>
 
-<body>
+<body class="{{ request()->routeIs('login') ? 'dashboard-login-page' : '' }}">
     <div id="app">
         <section class="section">
             <div class="container mt-5">

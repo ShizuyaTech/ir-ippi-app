@@ -6,9 +6,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    public const SAFETY_REPORT_ROLES = [
+        'user' => 'User',
+        'admin' => 'Administrator',
+        'safety_pic' => 'PIC Safety & Healthy',
+        'ir_reviewer' => 'Reviewer Industrial Relationship',
+        'she' => 'Tim Safety, Healthy & Environment',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -19,9 +28,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // optional role fields used by isAdmin()
         'role',
-        'is_admin',
     ];
 
     /**
@@ -41,32 +48,27 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean',
         'password' => 'hashed',
     ];
 
     /**
      * Return true if the user is an administrator.
      *
-     * This method supports two common patterns:
-     *  - a boolean `is_admin` column; or
-     *  - a string `role` column that equals 'admin'.
-     *
-     * @return bool
+     * Admin access is granted by the admin role or the configured admin email list.
      */
     public function isAdmin(): bool
     {
-        // Admin defined by email(s). Allow comma-separated list in ADMIN_EMAILS env var.
-        // Default admin email: admin@company.com
-        $adminEmails = array_map('trim', explode(',', env('ADMIN_EMAILS', 'admin@company.com')));
-
-        if (!isset($this->email) || empty($this->email)) {
-            return false;
+        if ($this->role === 'admin') {
+            return true;
         }
 
-        $userEmail = strtolower($this->email);
-        $normalized = array_map('strtolower', $adminEmails);
+        $adminEmails = array_map('strtolower', config('auth.admin_emails', []));
 
-        return in_array($userEmail, $normalized, true);
+        return $this->email !== null && in_array(strtolower($this->email), $adminEmails, true);
+    }
+
+    public function hasSafetyReportRole(string ...$roles): bool
+    {
+        return $this->isAdmin() || in_array($this->role, $roles, true);
     }
 }

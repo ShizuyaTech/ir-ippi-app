@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         Paginator::useBootstrapFour();
-        
+
         // Load helpers
         require_once app_path('helpers.php');
     }
@@ -39,34 +39,13 @@ class AppServiceProvider extends ServiceProvider
                         ->get();
                 }
             );
-            
+
             $view->with('activeAssessments', $activeAssessments);
         });
 
-        // ✅ OPTIMIZED: Cache admin status using user session
         View::composer('*', function ($view) {
-            $isAdmin = false;
-            
-            if (\Illuminate\Support\Facades\Auth::check()) {
-                // Cache admin check per user for 1 hour
-                $isAdmin = \Illuminate\Support\Facades\Cache::remember(
-                    'user_is_admin_' . \Illuminate\Support\Facades\Auth::id(),
-                    now()->addHour(),
-                    function () {
-                        $user = \Illuminate\Support\Facades\Auth::user();
-                        $adminEmails = array_map('trim', explode(',', env('ADMIN_EMAILS', 'admin@company.com')));
-                        
-                        if (isset($user->email)) {
-                            $userEmail = strtolower($user->email);
-                            $normalizedAdminEmails = array_map('strtolower', $adminEmails);
-                            return in_array($userEmail, $normalizedAdminEmails, true);
-                        }
-                        
-                        return false;
-                    }
-                );
-            }
-            
+            $isAdmin = \Illuminate\Support\Facades\Auth::user()?->isAdmin() ?? false;
+
             $view->with('isAdmin', $isAdmin);
         });
     }

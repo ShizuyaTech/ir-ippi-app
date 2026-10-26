@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Schedule;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -15,9 +14,12 @@ class ScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::where('email', 'admin@company.com')->first();
+        $admin = User::query()
+            ->where('role', 'admin')
+            ->orWhereIn('email', config('auth.admin_emails', []))
+            ->first();
 
-        if (!$admin) {
+        if (! $admin) {
             return;
         }
 
@@ -34,7 +36,7 @@ class ScheduleSeeder extends Seeder
                 'type' => 'meeting',
                 'priority' => 'high',
                 'status' => 'scheduled',
-                'notes' => 'Mohon bawa laporan progress masing-masing divisi'
+                'notes' => 'Mohon bawa laporan progress masing-masing divisi',
             ],
             [
                 'title' => 'Briefing Tim HR',
@@ -46,7 +48,7 @@ class ScheduleSeeder extends Seeder
                 'location' => 'Ruang Meeting HR',
                 'type' => 'meeting',
                 'priority' => 'medium',
-                'status' => 'scheduled'
+                'status' => 'scheduled',
             ],
 
             // Training schedules
@@ -61,7 +63,7 @@ class ScheduleSeeder extends Seeder
                 'type' => 'training',
                 'priority' => 'high',
                 'status' => 'scheduled',
-                'notes' => 'Dress code: business casual'
+                'notes' => 'Dress code: business casual',
             ],
 
             // Event schedules
@@ -75,7 +77,7 @@ class ScheduleSeeder extends Seeder
                 'location' => 'Ballroom Hotel Grand',
                 'type' => 'event',
                 'priority' => 'medium',
-                'status' => 'scheduled'
+                'status' => 'scheduled',
             ],
 
             // Deadline schedules
@@ -86,7 +88,7 @@ class ScheduleSeeder extends Seeder
                 'end_date' => Carbon::now()->addDays(3),
                 'type' => 'deadline',
                 'priority' => 'high',
-                'status' => 'scheduled'
+                'status' => 'scheduled',
             ],
 
             // Completed schedules
@@ -101,7 +103,7 @@ class ScheduleSeeder extends Seeder
                 'type' => 'meeting',
                 'priority' => 'medium',
                 'status' => 'completed',
-                'notes' => 'Project sudah selesai sesuai timeline'
+                'notes' => 'Project sudah selesai sesuai timeline',
             ],
 
             // In progress schedules
@@ -115,15 +117,15 @@ class ScheduleSeeder extends Seeder
                 'location' => 'Lab Komputer',
                 'type' => 'training',
                 'priority' => 'high',
-                'status' => 'in_progress'
-            ]
+                'status' => 'in_progress',
+            ],
         ];
 
         foreach ($schedules as $scheduleData) {
             Schedule::create(array_merge($scheduleData, [
                 'created_by' => $admin->id,
                 'created_at' => Carbon::now()->subDays(rand(1, 10)),
-                'updated_at' => Carbon::now()->subDays(rand(0, 5))
+                'updated_at' => Carbon::now()->subDays(rand(0, 5)),
             ]));
         }
 

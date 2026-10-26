@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\DashboardScore;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DashboardScoreSeeder extends Seeder
@@ -15,13 +14,13 @@ class DashboardScoreSeeder extends Seeder
     public function run(): void
     {
         // Cari user dengan role admin atau email admin
-        $admin = User::where('email', 'admin@company.com')
-                    // ->orWhere('role', 'admin')
-                    // ->orWhere('is_admin', true)
-                    ->first();
+        $admin = User::query()
+            ->where('role', 'admin')
+            ->orWhereIn('email', config('auth.admin_emails', []))
+            ->first();
 
         // Jika tidak ditemukan admin, gunakan user pertama
-        if (!$admin) {
+        if (! $admin) {
             $admin = User::first();
         }
 
@@ -36,6 +35,6 @@ class DashboardScoreSeeder extends Seeder
             'updated_by' => $admin->id,
         ]);
 
-        $this->command->info('Dashboard Score created successfully for user ID: ' . $admin->id);
+        $this->command->info('Dashboard Score created successfully for user ID: '.$admin->id);
     }
 }

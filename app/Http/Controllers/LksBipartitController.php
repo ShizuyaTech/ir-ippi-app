@@ -29,16 +29,16 @@ class LksBipartitController extends Controller
         // Search
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
         $tasks = $query->orderBy('priority', 'desc')
-                      ->orderBy('due_date')
-                      ->orderBy('created_at', 'desc')
-                      ->paginate(10);
+            ->orderBy('due_date')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         $isAdmin = $this->isAdmin(Auth::user()); // Using the helper method defined below
 
@@ -51,6 +51,7 @@ class LksBipartitController extends Controller
     public function create()
     {
         $users = User::all(); // Untuk assign task
+
         return view('pages.lks-bipartit.create', compact('users'));
     }
 
@@ -64,7 +65,7 @@ class LksBipartitController extends Controller
             'description' => 'nullable|string',
             'priority' => 'required|integer|between:1,4',
             'due_date' => 'nullable|date',
-            'assigned_to' => 'nullable|exists:users,id'
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
 
         LksBipartit::create([
@@ -74,11 +75,11 @@ class LksBipartitController extends Controller
             'due_date' => $request->due_date,
             'assigned_to' => $request->assigned_to,
             'created_by' => Auth::id(),
-            'status' => 'review'
+            'status' => 'review',
         ]);
 
         return redirect()->route('lks-bipartit.index')
-                         ->with('success', 'Task LKS Bipartit berhasil dibuat.');
+            ->with('success', 'Task LKS Bipartit berhasil dibuat.');
     }
 
     /**
@@ -88,7 +89,7 @@ class LksBipartitController extends Controller
     {
         $lksBipartit->load(['assignee', 'creator']);
         $isAdmin = $this->isAdmin(Auth::user()); // Use controller helper to check admin
-        
+
         return view('pages.lks-bipartit.show', compact('lksBipartit', 'isAdmin'));
     }
 
@@ -98,13 +99,14 @@ class LksBipartitController extends Controller
     public function edit(LksBipartit $lksBipartit)
     {
         $users = User::all();
+
         return view('pages.lks-bipartit.edit', compact('lksBipartit', 'users'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,LksBipartit $lksBipartit)
+    public function update(Request $request, LksBipartit $lksBipartit)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -113,13 +115,13 @@ class LksBipartitController extends Controller
             'priority' => 'required|integer|between:1,4',
             'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:users,id',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
         $lksBipartit->update($request->all());
 
         return redirect()->route('lks-bipartit.index')
-                         ->with('success', 'Task LKS Bipartit berhasil diperbarui.');
+            ->with('success', 'Task LKS Bipartit berhasil diperbarui.');
     }
 
     /**
@@ -130,14 +132,14 @@ class LksBipartitController extends Controller
         $lksBipartit->delete();
 
         return redirect()->route('lks-bipartit.index')
-                         ->with('success', 'Task LKS Bipartit berhasil dihapus.');
+            ->with('success', 'Task LKS Bipartit berhasil dihapus.');
     }
 
     // public function updateStatus(Request $request, $id)
     // {
     //     // Gunakan $id sebagai parameter, bukan model binding
     //     $task = LksBipartit::findOrFail($id);
-        
+
     //     $request->validate([
     //         'status' => 'required|in:review,on_progress,done'
     //     ]);
@@ -155,14 +157,14 @@ class LksBipartitController extends Controller
     public function updateStatus(Request $request, LksBipartit $lksBipartit)
     {
         $request->validate([
-            'status' => 'required|in:review,on_progress,done'
+            'status' => 'required|in:review,on_progress,done',
         ]);
 
         $lksBipartit->update(['status' => $request->status]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Status berhasil diperbarui'
+            'message' => 'Status berhasil diperbarui',
         ]);
 
         // return redirect()->route('lks-bipartit.index')
@@ -170,27 +172,25 @@ class LksBipartitController extends Controller
     }
 
     public function quickStatus(Request $request, $id)
-{
-    $task = LksBipartit::findOrFail($id);
-    
-    $request->validate([
-        'status' => 'required|in:review,on_progress,done'
-    ]);
+    {
+        $task = LksBipartit::findOrFail($id);
 
-    $oldStatus = $task->status;
-    $task->update(['status' => $request->status]);
+        $request->validate([
+            'status' => 'required|in:review,on_progress,done',
+        ]);
 
-    return redirect()->route('lks-bipartit.show', $task->id)
-                    ->with('success', "Status berhasil diubah dari {$task->getStatusName($oldStatus)} menjadi {$task->status_name}");
-}
+        $oldStatus = $task->status;
+        $task->update(['status' => $request->status]);
+
+        return redirect()->route('lks-bipartit.show', $task->id)
+            ->with('success', "Status berhasil diubah dari {$task->getStatusName($oldStatus)} menjadi {$task->status_name}");
+    }
 
     /**
      * Helper method untuk cek jika user adalah admin
      */
     private function isAdmin($user)
     {
-        return $user->email === 'admin@company.com' 
-            || $user->email === 'administrator@company.com'
-            || (isset($user->role) && $user->role === 'admin');
+        return $user?->isAdmin() ?? false;
     }
 }

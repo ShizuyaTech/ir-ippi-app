@@ -16,21 +16,21 @@ class FeedbackController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $this->isAdmin($user);
-        
+
         if ($isAdmin) {
             // Admin: lihat semua feedback yang sudah disubmit (bukan draft)
             $feedbacks = Feedback::with(['author', 'responder'])
-                                ->where('status', '!=', 'draft')
-                                ->latest()
-                                ->paginate(10);
+                ->where('status', '!=', 'draft')
+                ->latest()
+                ->paginate(10);
         } else {
             // Pengurus serikat: hanya lihat feedback mereka sendiri
             $feedbacks = Feedback::with(['author', 'responder'])
-                                ->where('created_by', $user->id)
-                                ->latest()
-                                ->paginate(10);
+                ->where('created_by', $user->id)
+                ->latest()
+                ->paginate(10);
         }
-        
+
         return view('pages.feedbacks.index', compact('feedbacks', 'isAdmin'));
     }
 
@@ -41,11 +41,11 @@ class FeedbackController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $this->isAdmin($user);
-        
+
         if ($isAdmin) {
             abort(403, 'Hanya pengurus serikat yang dapat membuat feedback.');
         }
-        
+
         return view('pages.feedbacks.create', compact('isAdmin'));
     }
 
@@ -55,7 +55,7 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        
+
         if ($this->isAdmin($user)) {
             abort(403, 'Hanya pengurus serikat yang dapat membuat feedback.');
         }
@@ -65,7 +65,7 @@ class FeedbackController extends Controller
             'content' => 'required|string|min:20',
             'category' => 'required|in:kebijakan,kondisi_kerja,fasilitas,komunikasi,lainnya',
             'priority' => 'required|in:low,medium,high,urgent',
-            'status' => 'required|in:draft,submitted'
+            'status' => 'required|in:draft,submitted',
         ]);
 
         $feedbackData = [
@@ -74,7 +74,7 @@ class FeedbackController extends Controller
             'category' => $request->category,
             'priority' => $request->priority,
             'status' => $request->status,
-            'created_by' => $user->id
+            'created_by' => $user->id,
         ];
 
         // Jika status submitted, set submitted_at
@@ -84,12 +84,12 @@ class FeedbackController extends Controller
 
         $feedback = Feedback::create($feedbackData);
 
-        $message = $request->status === 'submitted' 
-            ? 'Feedback berhasil dikirim ke manajemen.' 
+        $message = $request->status === 'submitted'
+            ? 'Feedback berhasil dikirim ke manajemen.'
             : 'Feedback berhasil disimpan sebagai draft.';
 
         return redirect()->route('feedbacks.index')
-                        ->with('success', $message);
+            ->with('success', $message);
     }
 
     /**
@@ -99,7 +99,7 @@ class FeedbackController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $this->isAdmin($user);
-        
+
         $feedback = Feedback::with(['author', 'responder'])->findOrFail($id);
 
         // Cek akses: admin bisa lihat semua yang bukan draft, user hanya lihat miliknya
@@ -125,7 +125,7 @@ class FeedbackController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $this->isAdmin($user);
-        
+
         $feedback = Feedback::findOrFail($id);
 
         // Hanya pembuat yang bisa edit, dan hanya jika status draft
@@ -135,7 +135,7 @@ class FeedbackController extends Controller
 
         if ($feedback->status !== 'draft') {
             return redirect()->route('feedback.show', $feedback->id)
-                            ->with('error', 'Feedback sudah dikirim dan tidak dapat diedit.');
+                ->with('error', 'Feedback sudah dikirim dan tidak dapat diedit.');
         }
 
         return view('pages.feedbacks.edit', compact('feedback', 'isAdmin'));
@@ -155,7 +155,7 @@ class FeedbackController extends Controller
 
         if ($feedback->status !== 'draft') {
             return redirect()->route('feedbacks.show', $feedback->id)
-                            ->with('error', 'Feedback sudah dikirim dan tidak dapat diedit.');
+                ->with('error', 'Feedback sudah dikirim dan tidak dapat diedit.');
         }
 
         $request->validate([
@@ -163,7 +163,7 @@ class FeedbackController extends Controller
             'content' => 'required|string|min:20',
             'category' => 'required|in:kebijakan,kondisi_kerja,fasilitas,komunikasi,lainnya',
             'priority' => 'required|in:low,medium,high,urgent',
-            'status' => 'required|in:draft,submitted'
+            'status' => 'required|in:draft,submitted',
         ]);
 
         $updateData = [
@@ -171,7 +171,7 @@ class FeedbackController extends Controller
             'content' => $request->content,
             'category' => $request->category,
             'priority' => $request->priority,
-            'status' => $request->status
+            'status' => $request->status,
         ];
 
         // Jika mengubah dari draft ke submitted, set submitted_at
@@ -181,12 +181,12 @@ class FeedbackController extends Controller
 
         $feedback->update($updateData);
 
-        $message = $request->status === 'submitted' 
-            ? 'Feedback berhasil dikirim ke manajemen.' 
+        $message = $request->status === 'submitted'
+            ? 'Feedback berhasil dikirim ke manajemen.'
             : 'Feedback berhasil diperbarui.';
 
         return redirect()->route('feedbacks.index')
-                        ->with('success', $message);
+            ->with('success', $message);
     }
 
     /**
@@ -203,13 +203,13 @@ class FeedbackController extends Controller
 
         if ($feedback->status !== 'draft') {
             return redirect()->route('feedbacks.show', $feedback->id)
-                            ->with('error', 'Feedback sudah dikirim dan tidak dapat dihapus.');
+                ->with('error', 'Feedback sudah dikirim dan tidak dapat dihapus.');
         }
 
         $feedback->delete();
 
         return redirect()->route('feedbacks.index')
-                        ->with('success', 'Feedback berhasil dihapus.');
+            ->with('success', 'Feedback berhasil dihapus.');
     }
 
     //  public function userIndex()
@@ -219,14 +219,14 @@ class FeedbackController extends Controller
     //                         ->published()
     //                         ->latest()
     //                         ->paginate(10);
-        
+
     //     return view('user.feedback.index', compact('feedbacks'));
     // }
 
     // public function assessableAssessments()
     // {
     //     $user = Auth::user();
-        
+
     //     if ($user->role === 'user') {
     //         abort(403, 'Anda tidak memiliki akses.');
     //     }
@@ -241,28 +241,28 @@ class FeedbackController extends Controller
     public function respond(Request $request, $id)
     {
         $user = Auth::user();
-        
-        if (!$this->isAdmin($user)) {
+
+        if (! $this->isAdmin($user)) {
             abort(403, 'Hanya admin yang dapat memberikan tanggapan.');
         }
 
         $request->validate([
             'management_response' => 'required|string|min:10',
-            'status' => 'required|in:under_review,responded,closed'
+            'status' => 'required|in:under_review,responded,closed',
         ]);
 
         $feedback = Feedback::findOrFail($id);
-        
+
         // Pastikan feedback sudah submitted (bukan draft)
         if ($feedback->status === 'draft') {
             return redirect()->route('feedbacks.show', $feedback->id)
-                            ->with('error', 'Tidak dapat menanggapi feedback yang masih draft.');
+                ->with('error', 'Tidak dapat menanggapi feedback yang masih draft.');
         }
 
         $updateData = [
             'management_response' => $request->management_response,
             'status' => $request->status,
-            'responded_by' => $user->id
+            'responded_by' => $user->id,
         ];
 
         // Jika status berubah ke responded/closed, set responded_at
@@ -273,7 +273,7 @@ class FeedbackController extends Controller
         $feedback->update($updateData);
 
         return redirect()->route('feedbacks.index', $feedback->id)
-                        ->with('success', 'Tanggapan berhasil disimpan.');
+            ->with('success', 'Tanggapan berhasil disimpan.');
 
     }
 
@@ -291,16 +291,16 @@ class FeedbackController extends Controller
 
         if ($feedback->status !== 'draft') {
             return redirect()->route('feedbacks.show', $feedback->id)
-                            ->with('error', 'Feedback sudah dikirim sebelumnya.');
+                ->with('error', 'Feedback sudah dikirim sebelumnya.');
         }
 
         $feedback->update([
             'status' => 'submitted',
-            'submitted_at' => now()
+            'submitted_at' => now(),
         ]);
 
         return redirect()->route('feedbacks.index')
-                        ->with('success', 'Feedback berhasil dikirim ke manajemen.');
+            ->with('success', 'Feedback berhasil dikirim ke manajemen.');
     }
 
     /**
@@ -308,16 +308,12 @@ class FeedbackController extends Controller
      */
     private function isAdmin($user)
     {
-        // Ganti dengan logic pengecekan admin yang sesuai
-        // Contoh: cek email, atau field role jika ada
-        return $user->email === 'admin@company.com' 
-            || $user->email === 'administrator@company.com'
-            || (isset($user->role) && $user->role === 'admin'); // jika ada field role
+        return $user?->isAdmin() ?? false;
     }
 
     private function isUnionMember($user)
     {
         // Ganti dengan logic pengecekan pengurus serikat yang sesuai
-        return !$this->isAdmin($user);
+        return ! $this->isAdmin($user);
     }
 }

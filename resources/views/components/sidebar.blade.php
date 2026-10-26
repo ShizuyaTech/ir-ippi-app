@@ -11,10 +11,19 @@
             <a href="index.html">IR</a>
         </div>
         <ul class="sidebar-menu">
+            @php
+                $isLimitedSafetyRole = in_array(auth()->user()?->role, ['ir_reviewer', 'she'], true);
+            @endphp
             <li class="menu-header">Dashboard</li>
             <li class="nav-item dropdown">
                 <a href="{{ route('home') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
+            @if (auth()->user()?->hasSafetyReportRole('safety_pic', 'ir_reviewer', 'she'))
+                <li class="nav-item dropdown {{ Request::is('safety-reports*') ? 'active' : '' }}">
+                    <a href="{{ route('safety-reports.index') }}" class="nav-link"><i class="fas fa-hard-hat"></i><span>Safety</span></a>
+                </li>
+            @endif
+            @unless ($isLimitedSafetyRole)
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown"><i
                         class="fas fa-sitemap"></i><span>Organisasi</span></a>
@@ -51,6 +60,9 @@
                         <li class='{{ Request::is('users*') ? 'active' : '' }}'>
                             <a class="nav-link" href="{{ route('users.index') }}">User Management</a>
                         </li>
+                        <li class='{{ Request::is('safety-report-employees*') ? 'active' : '' }}'>
+                            <a class="nav-link" href="{{ route('safety-report-employees.index') }}">Data Karyawan</a>
+                        </li>
                         <li class='{{ Request::is('assessments') ? 'active' : '' }}'>
                             <a class="nav-link" href="{{ route('assessments.index') }}">IR Assessment</a>
                         </li>
@@ -67,6 +79,7 @@
                     </ul>
                 </li>
             @endif
+            @endunless
         </ul>
     </aside>
 </div>

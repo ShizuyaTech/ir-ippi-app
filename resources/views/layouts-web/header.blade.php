@@ -10,8 +10,9 @@
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="{{ url('/#hero') }}" class="active">Home</a></li>
+                <li><a href="{{ route('safety-reports.create') }}">Laporan Safety</a></li>
                 <li><a href="{{ url('/#about') }}">About</a></li>
-                <li><a href="{{ url('/#news') }}">News</a></li>
+                {{-- <li><a href="{{ url('/#news') }}">News</a></li> --}}
                 {{-- <li><a href="#portfolio">Grand Design</a></li> --}}
                 {{-- <li><a href="#team">Team</a></li> --}}
                 <!-- Program Dropdown -->
@@ -50,7 +51,7 @@
                         <li><a href="#">Dropdown 4</a></li> --}}
                 {{-- </ul>
                 </li> --}}
-                <li><a href="{{ url('/#programs') }}">Program</a></li>
+                {{-- <li><a href="{{ url('/#programs') }}">Program</a></li> --}}
                 <li><a href="{{ url('/#achievements') }}">Achievement</a></li>
                 {{-- <li><a href="#portfolio">Feedback</a></li>
                 <li><a href="#contact">Contact</a></li> --}}

@@ -1,10 +1,105 @@
 @extends('layouts-web.app')
 
 @section('content')
+    @if (session('employee_verification_error'))
+        <div id="employee-verification-dialog" class="employee-verification-backdrop" role="dialog" aria-modal="true" aria-labelledby="employee-verification-title">
+            <div class="employee-verification-card">
+                <div class="employee-verification-icon" aria-hidden="true">
+                    <i class="bi bi-person-exclamation"></i>
+                </div>
+                <h1 id="employee-verification-title">Verifikasi belum berhasil</h1>
+                <p>{{ session('employee_verification_error') }}</p>
+                <p class="employee-verification-help">Pastikan NPK dan nama sesuai dengan data karyawan aktif. Silakan periksa kembali sebelum mencoba lagi.</p>
+                <div class="employee-verification-actions">
+                    <a href="{{ route('safety-reports.create') }}" class="btn btn-primary">Coba verifikasi kembali</a>
+                    <button id="close-employee-verification" type="button" class="btn btn-outline-secondary">Tutup</button>
+                </div>
+            </div>
+        </div>
+        <style>
+            .employee-verification-backdrop {
+                position: fixed;
+                inset: 0;
+                z-index: 1100;
+                display: grid;
+                place-items: center;
+                padding: 1rem;
+                background: rgba(12, 25, 36, .68);
+                backdrop-filter: blur(4px);
+            }
+
+            .employee-verification-card {
+                width: min(100%, 32rem);
+                padding: 2rem;
+                border-radius: 1rem;
+                background: #fff;
+                box-shadow: 0 1rem 3rem rgba(0, 0, 0, .2);
+                text-align: center;
+            }
+
+            .employee-verification-icon {
+                display: grid;
+                place-items: center;
+                width: 3.5rem;
+                height: 3.5rem;
+                margin: 0 auto 1rem;
+                border-radius: 50%;
+                background: #fff3cd;
+                color: #9a6700;
+                font-size: 1.5rem;
+            }
+
+            .employee-verification-card h1 {
+                margin-bottom: .75rem;
+                color: #172b3a;
+                font-size: 1.35rem;
+            }
+
+            .employee-verification-card p {
+                margin-bottom: .75rem;
+            }
+
+            .employee-verification-help {
+                color: #667085;
+            }
+
+            .employee-verification-actions {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: .75rem;
+                margin-top: 1.5rem;
+            }
+
+            @media (max-width: 575.98px) {
+                .employee-verification-card {
+                    padding: 1.5rem;
+                }
+
+                .employee-verification-actions > * {
+                    width: 100%;
+                }
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const dialog = document.getElementById('employee-verification-dialog');
+                const closeButton = document.getElementById('close-employee-verification');
+
+                closeButton.addEventListener('click', () => dialog.remove());
+                dialog.addEventListener('click', (event) => {
+                    if (event.target === dialog) {
+                        dialog.remove();
+                    }
+                });
+            });
+        </script>
+    @endif
+
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
-        <img src="{{ asset('img/hero-bg.jpg') }}" alt="" data-aos="fade-in">
+        <img src="{{ asset('img/homepage.png') }}" alt="" data-aos="fade-in">
 
         <div class="container d-flex flex-column align-items-center">
             <h2 data-aos="fade-up" data-aos-delay="100">INDUSTRIAL RELATIONSHIP PT. IPPI</h2>
@@ -22,24 +117,23 @@
 
     <!-- About Section -->
     <section id="about" class="about section">
-
         <div class="container">
-
             <div class="row gy-4">
                 <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
                     <h3>Profile IR PT. IPPI</h3>
-                    <img src="{{ asset('img/about.jpg') }}" class="img-fluid rounded-4 mb-4" alt="">
-                    <p>Ut fugiat ut sunt quia veniam. Voluptate perferendis perspiciatis quod nisi et. Placeat
+                    <img src="{{ asset('img/profile.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                    <img src="{{ asset('img/profile-serikat.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                    {{-- <p>Ut fugiat ut sunt quia veniam. Voluptate perferendis perspiciatis quod nisi et. Placeat
                         debitis quia recusandae odit et consequatur voluptatem. Dignissimos pariatur consectetur
                         fugiat voluptas ea.</p>
                     <p>Temporibus nihil enim deserunt sed ea. Provident sit expedita aut cupiditate nihil vitae quo
                         officia vel. Blanditiis eligendi possimus et in cum. Quidem eos ut sint rem veniam qui. Ut
                         ut repellendus nobis tempore doloribus debitis explicabo similique sit. Accusantium sed ut
-                        omnis beatae neque deleniti repellendus.</p>
+                        omnis beatae neque deleniti repellendus.</p> --}}
                 </div>
-                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
-                    <div class="content ps-0 ps-lg-5">
-                        <p class="fst-italic">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    {{-- <div class="content ps-0 ps-lg-5"> --}}
+                        {{-- <p class="fst-italic">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                             incididunt ut labore et dolore
                             magna aliqua.
@@ -58,18 +152,17 @@
                             reprehenderit in voluptate
                             velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                             proident
-                        </p>
-
+                        </p> --}}
+                        <h3>Struktur Serikat Pekerja</h3>
                         <div class="position-relative mt-4">
-                            <img src="{{ asset('img/about-2.jpg') }}" class="img-fluid rounded-4" alt="">
-                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+                            <img src="{{ asset('img/struktur-spsi.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                            <img src="{{ asset('img/struktur-ika.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                            {{-- <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a> --}}
                         </div>
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
-
         </div>
-
     </section><!-- /About Section -->
 
     <!-- Stats Section -->
@@ -202,7 +295,7 @@
     </section><!-- /News Section --> --}}
 
     <!-- News Section -->
-    <section id="news" class="news section">
+    {{-- <section id="news" class="news section">
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
@@ -238,7 +331,7 @@
                                 <div class="news-meta mt-3 pt-3 border-top">
                                     <small class="text-muted">
                                         <i class="bi bi-clock me-1"></i>
-                                        {{ $news->published_at->diffForHumans() }}
+                                        {{ $news->published_at?->diffForHumans() ?? $news->created_at?->diffForHumans() ?? '-' }}
                                     </small>
                                     <small class="text-muted ms-3">
                                         <i class="bi bi-eye me-1"></i>
@@ -263,7 +356,7 @@
 
         </div>
 
-    </section><!-- /News Section -->
+    </section><!-- /News Section --> --}}
 
     <!-- Clients Section -->
     {{-- <section id="clients" class="clients section light-background">
@@ -1330,7 +1423,7 @@
     </section><!-- /achievement Section --> --}}
 
     <!-- Program Section -->
-    <section id="programs" class="programs section bg-light">
+    {{-- <section id="programs" class="programs section bg-light">
 
         <div class="container" data-aos="fade-up">
 
@@ -1417,17 +1510,17 @@
 
         </div>
 
-    </section><!-- /Program Section -->
+    </section><!-- /Program Section --> --}}
 
     <!-- Achievement Section -->
     <section id="achievements" class="achievements section">
 
-        <div class="container" data-aos="fade-up">
+        {{-- <div class="container" data-aos="fade-up">
 
             <!-- Section Title -->
             <div class="section-title">
                 <h2>Our Achievements</h2>
-                <p>Prestasi dan pencapaian yang membanggakan dalam industri otomotif</p>
+                <p>Prestasi dan pencapaian Industrial Relationship PT. IPPI</p>
             </div>
 
             <!-- Year Filter -->
@@ -1510,7 +1603,31 @@
                 </div>
             @endif
 
-        </div>
+        </div> --}}
+        <div class="container" data-aos="fade-up">
+            <!-- Section Title -->
+            <div class="section-title">
+                <h2>Our Achievements</h2>
+                <p>Prestasi dan pencapaian Industrial Relationship PT. IPPI</p>
+            </div>
+            <div class="row gy-4">
+                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                        <h3>Tingkat Grup Astra International</h3>
+                        <div class="position-relative mt-4">
+                            <img src="{{ asset('img/ir-astra.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                            <h3>Tingkat Nasional</h3>
+                            <div class="position-relative mt-4">
+                                <img src="{{ asset('img/tkmpn-2024.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                                <img src="{{ asset('img/tkmpn-2025.png') }}" class="img-fluid rounded-4 mb-4" alt="">
+                                {{-- <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a> --}}
+                            </div>
+                        {{-- </div> --}}
+                    </div>
+                </div>
+            </div>
     </section><!-- /Achievement Section -->
 
     <!-- Scroll Top -->

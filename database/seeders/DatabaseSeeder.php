@@ -16,37 +16,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
         // Create additional users
         // User::factory(10)->create();
 
         // Buat admin
         User::updateOrCreate([
-            'email' => 'admin@company.com',
+            'email' => 'admin@cmsippi.com',
         ], [
             'name' => 'Administrator',
-            'password' => Hash::make('2025ippi1234'),
+            'password' => Hash::make('2026ippi1234'),
             'email_verified_at' => now(),
+            'role' => 'admin',
         ]);
 
         // Buat pengurus serikat (kita anggap sebagai user biasa tapi punya akses khusus)
         User::create([
             'name' => 'Ketua SPSI',
-            'email' => 'spsi@company.com',
-            'password' => Hash::make('2025spsi1234'),
+            'email' => 'spsi@cmsippi.com',
+            'password' => Hash::make('2026spsi1234'),
             'email_verified_at' => now(),
         ]);
 
         User::create([
             'name' => 'Ketua IKA',
-            'email' => 'ika@company.com',
-            'password' => Hash::make('2025ika1234'),
+            'email' => 'ika@cmsippi.com',
+            'password' => Hash::make('2026ika1234'),
             'email_verified_at' => now(),
         ]);
 
         // User::create([
         //     'name' => 'Bendahara Serikat',
-        //     'email' => 'bendahara@company.com',
+        //     'email' => 'bendahara@cmsippi.com',
         //     'password' => Hash::make('password'),
         //     'email_verified_at' => now(),
         // ]);
@@ -57,7 +58,7 @@ class DatabaseSeeder extends Seeder
         // Buat user biasa (karyawan)
         User::create([
             'name' => 'Karyawan Contoh',
-            'email' => 'karyawan@company.com',
+            'email' => 'karyawan@cmsippi.com',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);

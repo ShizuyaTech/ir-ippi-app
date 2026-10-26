@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\EnsureAdministrator::class,
+            'dashboard.safety' => \App\Http\Middleware\EnsureDashboardSafetyAccess::class,
+            'safety.role' => \App\Http\Middleware\EnsureSafetyReportRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
