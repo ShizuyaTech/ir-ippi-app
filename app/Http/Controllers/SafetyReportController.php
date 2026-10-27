@@ -133,7 +133,7 @@ class SafetyReportController extends Controller
 
         app(SafetyReportNotificationService::class)->notify(
             $report,
-            ['safety_pic'],
+            ['safety_pic','management'],
             'Laporan Safety Baru - '.$report->report_number,
             'Laporan safety baru telah dikirim dan menunggu verifikasi PIC Safety.'
         );
@@ -401,7 +401,7 @@ class SafetyReportController extends Controller
 
         app(SafetyReportNotificationService::class)->notify(
             $safetyReport->fresh(),
-            ['safety_pic'],
+            ['safety_pic','ir_reviewer','management'],
             'Laporan Safety Ditutup - '.$safetyReport->report_number,
             'Laporan telah ditutup setelah bukti perbaikan disimpan.');
 

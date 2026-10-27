@@ -17,6 +17,7 @@ class User extends Authenticatable
         'safety_pic' => 'PIC Safety & Healthy',
         'ir_reviewer' => 'Reviewer Industrial Relationship',
         'she' => 'Tim Safety, Healthy & Environment',
+        'management' => 'Management',
     ];
 
     /**

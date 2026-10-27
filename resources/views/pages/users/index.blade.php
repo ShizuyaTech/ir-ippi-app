@@ -64,11 +64,11 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>-</td>
-                                            {{-- <td>
+                                            <td>
                                                 @foreach ($user->getRoleNames() as $role)
                                                     <span class="badge bg-info text-white">{{ $role }}</span>
                                                 @endforeach
-                                            </td> --}}
+                                            </td>
                                             {{-- @can('update user', 'delete user') --}}
                                             <td>
                                                 <div class="d-flex justify-content-center">
