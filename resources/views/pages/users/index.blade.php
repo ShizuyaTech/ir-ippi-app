@@ -64,10 +64,21 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>-</td>
-                                            <td>
+                                            {{-- <td>
                                                 @foreach ($user->getRoleNames() as $role)
                                                     <span class="badge bg-info text-white">{{ $role }}</span>
                                                 @endforeach
+                                            </td> --}}
+                                            <td>
+                                                @if (!empty($user->role))
+                                                    <span class="badge bg-info text-white">
+                                                        {{ $user->role }}
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-secondary text-white">
+                                                        Belum memiliki role
+                                                    </span>
+                                                @endif
                                             </td>
                                             {{-- @can('update user', 'delete user') --}}
                                             <td>
