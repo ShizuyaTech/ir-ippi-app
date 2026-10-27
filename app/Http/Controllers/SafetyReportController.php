@@ -11,6 +11,7 @@ use App\Http\Requests\VerifySafetyReportEmployeeRequest;
 use App\Http\Requests\VerifySafetyReportRequest;
 use App\Models\SafetyReport;
 use App\Models\SafetyReportEmployee;
+use App\Services\SafetyReportNotificationService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -129,6 +130,13 @@ class SafetyReportController extends Controller
 
             return $report;
         });
+
+        app(SafetyReportNotificationService::class)->notify(
+            $report,
+            ['safety_pic'],
+            'Laporan Safety Baru - '.$report->report_number,
+            'Laporan safety baru telah dikirim dan menunggu verifikasi PIC Safety.'
+        );
 
         $request->session()->forget('safety_report_employee');
 
@@ -285,6 +293,18 @@ class SafetyReportController extends Controller
             ]);
         });
 
+        $report = $safetyReport->fresh();
+
+            $recipientRole = $report->status === 'awaiting_she'
+                ? ['she']
+                : ['ir_reviewer'];
+
+            app(SafetyReportNotificationService::class)->notify(
+                $report,
+                $recipientRole,
+                'Laporan Safety Menunggu Review - '.$report->report_number,
+                'PIC Safety telah menyelesaikan verifikasi. Laporan menunggu tindak lanjut tim terkait.'
+        );
         return redirect()->route('safety-reports.show', $safetyReport)->with('success', 'Verifikasi PIC berhasil disimpan.');
     }
 
@@ -379,6 +399,12 @@ class SafetyReportController extends Controller
             ]);
         });
 
+        app(SafetyReportNotificationService::class)->notify(
+            $safetyReport->fresh(),
+            ['safety_pic'],
+            'Laporan Safety Ditutup - '.$safetyReport->report_number,
+            'Laporan telah ditutup setelah bukti perbaikan disimpan.');
+
         return redirect()->route('safety-reports.show', $safetyReport)->with('success', 'Bukti perbaikan tersimpan dan laporan telah ditutup.');
     }
 
@@ -416,6 +442,23 @@ class SafetyReportController extends Controller
             ]);
         });
 
+        $report = $safetyReport->fresh();
+
+        if ($validated['decision'] === 'ok' && $stage === 'ir') {
+            app(SafetyReportNotificationService::class)->notify(
+                $report,
+                ['she'],
+                'Laporan Safety Menunggu Persetujuan SHE - '.$report->report_number,
+                'IR telah menyetujui laporan. Silakan lakukan review oleh Tim SHE.'
+            );
+        } elseif ($validated['decision'] !== 'ok') {
+            app(SafetyReportNotificationService::class)->notify(
+                $report,
+                ['safety_pic'],
+                'Laporan Safety Dikembalikan ke PIC - '.$report->report_number,
+                "Laporan dikembalikan oleh tahap {$stageLabel}. Silakan periksa catatan pada aplikasi."
+            );
+        }
         return redirect()->route('safety-reports.show', $safetyReport)->with('success', "Keputusan {$stageLabel} berhasil disimpan.");
     }
 
