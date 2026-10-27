@@ -12,13 +12,13 @@
         </div>
         <ul class="sidebar-menu">
             @php
-                $isLimitedSafetyRole = in_array(auth()->user()?->role, ['ir_reviewer', 'she'], true);
+                $isLimitedSafetyRole = in_array(auth()->user()?->role, ['ir_reviewer', 'she', 'management'], true);
             @endphp
             <li class="menu-header">Dashboard</li>
             <li class="nav-item dropdown">
                 <a href="{{ route('home') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
-            @if (auth()->user()?->hasSafetyReportRole('safety_pic', 'ir_reviewer', 'she'))
+            @if (auth()->user()?->hasSafetyReportRole('safety_pic', 'ir_reviewer', 'she', 'management'))
                 <li class="nav-item dropdown {{ Request::is('safety-reports*') ? 'active' : '' }}">
                     <a href="{{ route('safety-reports.index') }}" class="nav-link"><i class="fas fa-hard-hat"></i><span>Safety</span></a>
                 </li>

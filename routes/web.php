@@ -51,6 +51,8 @@ Route::get('/safety-reports/confirmation', [\App\Http\Controllers\SafetyReportCo
 Route::middleware(['auth', 'dashboard.safety'])->group(function () {
     // Use DashboardController so the view receives required variables (scores, isAdmin, etc.)
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
+    Route::get('/profile', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
 
     Route::resource('users', UserController::class)->middleware('admin');
     Route::get('safety-report-employees/template', [\App\Http\Controllers\SafetyReportEmployeeController::class, 'downloadTemplate'])
@@ -98,7 +100,7 @@ Route::middleware(['auth', 'dashboard.safety'])->group(function () {
     Route::resource('dashboard-scores', DashboardController::class)->except(['show']);
     Route::post('/dashboard/scores', [DashboardController::class, 'updateScores'])->name('dashboard.update-scores');
 
-    Route::prefix('safety-reports')->name('safety-reports.')->middleware('safety.role:safety_pic,ir_reviewer,she')->group(function () {
+    Route::prefix('safety-reports')->name('safety-reports.')->middleware('safety.role:safety_pic,ir_reviewer,she,management')->group(function () {
         Route::get('/', [\App\Http\Controllers\SafetyReportController::class, 'index'])->name('index');
         Route::get('/{safetyReport}', [\App\Http\Controllers\SafetyReportController::class, 'show'])->name('show');
         Route::get('/{safetyReport}/images/{type}', [\App\Http\Controllers\SafetyReportController::class, 'image'])->name('image');

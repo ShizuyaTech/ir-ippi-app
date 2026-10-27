@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -47,7 +48,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8'],
-            'role' => ['required', 'in:user,admin,safety_pic,ir_reviewer,she'],
+            'role' => ['required', Rule::in(array_keys(User::SAFETY_REPORT_ROLES))],
         ]);
 
         // store the request...
@@ -93,7 +94,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,'.$id],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', 'in:user,admin,safety_pic,ir_reviewer,she'],
+            'role' => ['required', Rule::in(array_keys(User::SAFETY_REPORT_ROLES))],
         ]);
 
         // update the request...
@@ -122,5 +123,32 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
+    }
+
+    public function editProfile(Request $request)
+    {
+        return view('pages.profile.edit', ['user' => $request->user()]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'current_password' => ['required_with:password', 'current_password'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if (! empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
     }
 }

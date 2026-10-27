@@ -13,6 +13,9 @@
                 <div class="d-sm-none d-lg-inline-block">Hi, {{ auth()->user()->name ?? 'Guest' }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
+                <a href="{{ route('profile.edit') }}" class="dropdown-item has-icon">
+                    <i class="fas fa-user"></i> Profil Saya
+                </a>
                 <a href="" class="dropdown-item has-icon text-danger"
                     onclick="event.preventDefault();getElementById('logout-form').submit()">
                     <i class="fas fa-sign-out-alt"></i> Logout

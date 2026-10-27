@@ -505,6 +505,34 @@ class SafetyReportWorkflowTest extends TestCase
         $this->assertFalse($employee->fresh()->is_active);
     }
 
+    public function test_admin_can_create_and_update_users_with_management_role(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        $this->post(route('users.store'), [
+            'name' => 'Management User',
+            'email' => 'management@example.com',
+            'password' => 'password123',
+            'role' => 'management',
+        ])->assertRedirect(route('users.index'))
+            ->assertSessionHasNoErrors();
+
+        $managementUser = User::query()->where('email', 'management@example.com')->firstOrFail();
+        $this->assertSame('management', $managementUser->role);
+
+        $this->put(route('users.update', $managementUser), [
+            'name' => 'Updated Management User',
+            'email' => $managementUser->email,
+            'password' => '',
+            'role' => 'management',
+        ])->assertRedirect(route('users.index'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('management', $managementUser->fresh()->role);
+        $this->assertSame('Updated Management User', $managementUser->fresh()->name);
+    }
+
     public function test_admin_can_import_and_update_employees_from_excel(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
@@ -654,6 +682,65 @@ class SafetyReportWorkflowTest extends TestCase
             $this->get(route('feedbacks.index'))->assertForbidden();
             $this->get(route('users.index'))->assertForbidden();
         }
+    }
+
+    public function test_management_can_open_safety_and_manage_own_profile_without_role_access(): void
+    {
+        $managementUser = User::factory()->create(['role' => 'management']);
+        $this->actingAs($managementUser);
+
+        $this->view('components.sidebar', ['isAdmin' => false])
+            ->assertSee('Dashboard')
+            ->assertSee('Safety')
+            ->assertDontSee('Feedback');
+
+        $this->get(route('safety-reports.index'))->assertOk();
+        $this->get(route('profile.edit'))
+            ->assertOk()
+            ->assertSee('Profil Saya')
+            ->assertDontSee('name="role"', false);
+        $this->get(route('users.index'))->assertForbidden();
+
+        $this->put(route('profile.update'), [
+            'name' => 'Management Updated',
+            'email' => $managementUser->email,
+            'role' => 'admin',
+        ])->assertRedirect(route('profile.edit'))
+            ->assertSessionHas('success', 'Profil berhasil diperbarui.');
+
+        $this->assertSame('management', $managementUser->fresh()->role);
+        $this->assertSame('Management Updated', $managementUser->fresh()->name);
+    }
+
+    public function test_user_can_change_own_password_after_confirming_current_password(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+            'password' => 'old-password',
+        ]);
+        $this->actingAs($user);
+
+        $this->put(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'current_password' => 'old-password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ])->assertRedirect(route('profile.edit'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('new-password', $user->fresh()->password));
+
+        $this->put(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'current_password' => 'incorrect-password',
+            'password' => 'another-password',
+            'password_confirmation' => 'another-password',
+        ])->assertRedirect()
+            ->assertSessionHasErrors('current_password');
+
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('new-password', $user->fresh()->password));
     }
 
     private function verifyEmployeeIdentity(): void
