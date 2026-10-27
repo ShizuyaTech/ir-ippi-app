@@ -63,7 +63,6 @@
                                         <tr>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>-</td>
                                             {{-- <td>
                                                 @foreach ($user->getRoleNames() as $role)
                                                     <span class="badge bg-info text-white">{{ $role }}</span>
