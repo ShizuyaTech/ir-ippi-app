@@ -19,7 +19,7 @@ class EnsureDashboardSafetyAccess
 
         if (
             $user !== null
-            && in_array($user->role, ['ir_reviewer', 'she', 'management'], true)
+            && in_array($user->role, ['ir_reviewer', 'she'], true)
             && ! in_array($request->route()?->getName(), ['home', 'dashboard', 'profile.edit', 'profile.update'], true)
             && ! str_starts_with((string) $request->route()?->getName(), 'safety-reports.')
         ) {

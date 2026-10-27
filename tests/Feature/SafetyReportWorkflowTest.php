@@ -684,7 +684,7 @@ class SafetyReportWorkflowTest extends TestCase
         }
     }
 
-    public function test_management_can_open_safety_and_manage_own_profile_without_role_access(): void
+    public function test_management_has_user_sidebar_access_and_can_manage_own_profile(): void
     {
         $managementUser = User::factory()->create(['role' => 'management']);
         $this->actingAs($managementUser);
@@ -692,14 +692,15 @@ class SafetyReportWorkflowTest extends TestCase
         $this->view('components.sidebar', ['isAdmin' => false])
             ->assertSee('Dashboard')
             ->assertSee('Safety')
-            ->assertDontSee('Feedback');
+            ->assertSee('Feedback')
+            ->assertSee('Organisasi');
 
         $this->get(route('safety-reports.index'))->assertOk();
+        $this->get(route('feedbacks.index'))->assertOk();
         $this->get(route('profile.edit'))
             ->assertOk()
             ->assertSee('Profil Saya')
             ->assertDontSee('name="role"', false);
-        $this->get(route('users.index'))->assertForbidden();
 
         $this->put(route('profile.update'), [
             'name' => 'Management Updated',

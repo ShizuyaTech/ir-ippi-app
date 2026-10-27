@@ -12,7 +12,7 @@
         </div>
         <ul class="sidebar-menu">
             @php
-                $isLimitedSafetyRole = in_array(auth()->user()?->role, ['ir_reviewer', 'she', 'management'], true);
+                $isLimitedSafetyRole = in_array(auth()->user()?->role, ['ir_reviewer', 'she'], true);
             @endphp
             <li class="menu-header">Dashboard</li>
             <li class="nav-item dropdown">
